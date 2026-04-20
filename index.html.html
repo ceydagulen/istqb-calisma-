@@ -1,0 +1,1679 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ISTQB Çıkmış Sorular - Temel Seviye</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background: #f4f6f8;
+    color: #222;
+    line-height: 1.5;
+    padding: 20px;
+  }
+  .container {
+    max-width: 900px;
+    margin: 0 auto;
+  }
+  h1 {
+    color: #1a4d7a;
+    margin-bottom: 10px;
+    font-size: 1.8em;
+  }
+  .subtitle {
+    color: #666;
+    margin-bottom: 25px;
+  }
+  .card {
+    background: #fff;
+    border-radius: 8px;
+    padding: 24px;
+    margin-bottom: 16px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+  }
+  .exam-select {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 12px;
+    margin-top: 16px;
+  }
+  button {
+    background: #1a4d7a;
+    color: #fff;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 6px;
+    font-size: 15px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: background 0.15s;
+  }
+  button:hover { background: #133c60; }
+  button:disabled { background: #ccc; cursor: not-allowed; }
+  button.secondary {
+    background: #fff;
+    color: #1a4d7a;
+    border: 1px solid #1a4d7a;
+  }
+  button.secondary:hover { background: #eef4fa; }
+  .question-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid #eee;
+    font-size: 14px;
+    color: #666;
+  }
+  .question-text {
+    margin-bottom: 18px;
+    white-space: pre-wrap;
+    line-height: 1.6;
+  }
+  .question-text strong { color: #1a4d7a; }
+  .options {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .option {
+    display: flex;
+    align-items: flex-start;
+    padding: 12px 14px;
+    border: 1.5px solid #ddd;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.15s;
+    background: #fafafa;
+  }
+  .option:hover { border-color: #1a4d7a; background: #f0f6fc; }
+  .option input { margin-right: 10px; margin-top: 3px; flex-shrink: 0; }
+  .option.correct {
+    border-color: #2e8b2e;
+    background: #e8f5e8;
+  }
+  .option.incorrect {
+    border-color: #c0392b;
+    background: #fdecea;
+  }
+  .option.correct-not-selected {
+    border-color: #2e8b2e;
+    background: #f1faf1;
+    border-style: dashed;
+  }
+  .option label {
+    cursor: pointer;
+    flex: 1;
+    user-select: none;
+  }
+  .nav-buttons {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+    flex-wrap: wrap;
+  }
+  .result-box {
+    background: #1a4d7a;
+    color: white;
+    padding: 20px;
+    border-radius: 6px;
+    margin-bottom: 16px;
+    text-align: center;
+  }
+  .result-box .score {
+    font-size: 2.5em;
+    font-weight: bold;
+    margin: 10px 0;
+  }
+  .result-box .pass { color: #6ee76e; }
+  .result-box .fail { color: #ff9999; }
+  .progress-bar {
+    height: 6px;
+    background: #e0e0e0;
+    border-radius: 3px;
+    overflow: hidden;
+    margin-bottom: 16px;
+  }
+  .progress-fill {
+    height: 100%;
+    background: #1a4d7a;
+    transition: width 0.3s;
+  }
+  .feedback {
+    margin-top: 14px;
+    padding: 12px;
+    border-radius: 6px;
+    font-size: 14px;
+  }
+  .feedback.correct {
+    background: #e8f5e8;
+    color: #1e5f1e;
+    border-left: 3px solid #2e8b2e;
+  }
+  .feedback.incorrect {
+    background: #fdecea;
+    color: #8b2a1e;
+    border-left: 3px solid #c0392b;
+  }
+  .question-list-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(45px, 1fr));
+    gap: 6px;
+    margin-top: 12px;
+  }
+  .q-num {
+    padding: 8px;
+    text-align: center;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 13px;
+    background: #fafafa;
+  }
+  .q-num:hover { background: #eef4fa; border-color: #1a4d7a; }
+  .q-num.answered { background: #d4e6f5; border-color: #1a4d7a; }
+  .q-num.correct { background: #c8e6c9; border-color: #2e8b2e; }
+  .q-num.incorrect { background: #ffcdd2; border-color: #c0392b; }
+  .q-num.current { outline: 2px solid #1a4d7a; outline-offset: 1px; }
+  .image-box {
+    background: #f8f8f8;
+    border: 1px dashed #aaa;
+    padding: 16px;
+    border-radius: 6px;
+    margin: 12px 0;
+    font-family: monospace;
+    font-size: 13px;
+    white-space: pre;
+    overflow-x: auto;
+  }
+  .info-note {
+    font-size: 13px;
+    color: #666;
+    margin-top: 8px;
+    font-style: italic;
+  }
+  table {
+    border-collapse: collapse;
+    margin: 12px 0;
+    font-size: 14px;
+    width: 100%;
+  }
+  table td, table th {
+    border: 1px solid #bbb;
+    padding: 6px 10px;
+    text-align: left;
+  }
+  table th { background: #eef4fa; }
+  .multi-select-hint {
+    font-size: 13px;
+    color: #c0392b;
+    font-weight: 500;
+    margin-bottom: 8px;
+  }
+  @media (max-width: 600px) {
+    body { padding: 10px; }
+    .card { padding: 16px; }
+    h1 { font-size: 1.4em; }
+  }
+</style>
+</head>
+<body>
+<div class="container" id="app"></div>
+
+<script>
+// ============= SORU VERİTABANI =============
+const examData = {
+  A: {
+    title: "Örnek Sınav Set A",
+    questions: [
+      {
+        q: "Aşağıdaki ifadelerden hangisi geçerli bir test amacını tanımlar?",
+        options: [
+          "Test edilen sistemde düzeltilmemiş hata kalmadığını kanıtlamak",
+          "Sistemin üretim ortamına (production) alınmasından sonra herhangi bir hata çıkmayacağını kanıtlamak",
+          "Test nesnesinin risk seviyesini azaltmak ve kalite seviyesine olan güveni artırmak",
+          "Test edilmemiş girdi kombinasyonlarının kalmadığını doğrulamak"
+        ],
+        correct: [2], lo: "FL-1.1.1", k: "K1"
+      },
+      {
+        q: "Aşağıdaki seçeneklerden hangisi başarıya katkıda bulunan test aktivitelerine bir örnektir?",
+        options: [
+          "Test uzmanlarının yazılım geliştirme yaşam döngüsünün (YGYD) çeşitli aktivitelerine dahil edilmesi ürünlerdeki hataların tespit edilmesine yardımcı olur.",
+          "Test uzmanlarının kodlama sırasında geliştiricileri rahatsız etmemeye çalışması, geliştiricilerin daha iyi kod yazmasını sağlar.",
+          "Test uzmanlarının son kullanıcılarla iş birliği yapması, bileşen entegrasyonu ve sistem testleri sırasında hata raporlarının kalitesini artırmaya yardımcı olur.",
+          "Sertifikalı test uzmanları, sertifikasız test uzmanlarından çok daha iyi test senaryoları tasarlayacaktır."
+        ],
+        correct: [0], lo: "FL-1.2.1", k: "K2"
+      },
+      {
+        q: "Yeni bir yazılımı, artımlı bir metodoloji (incrementally) kullanarak geliştiren bir ekibe test uzmanı olarak atandığınızı varsayın. Birkaç döngüdür (iteration) mevcut regresyon test senaryolarında hiçbir değişiklik yapılmadığını ve yeni regresyon hatalarının tespit edilmediğini fark ettiniz. Yöneticiniz bu durumdan memnun, ancak siz değilsiniz. Sağlıklı bir test uzmanı yaklaşımını tanımlayan test prensibi aşağıdakilerden hangisidir?",
+        options: [
+          "Antibiyotik direnci",
+          "Yeni hata bulamıyoruz başarılı bir yazılım elde ettik yanılgısı",
+          "Hatalar yazılımın belli alanlarında yoğunlaşır",
+          "Yazılımı %100 test etmek imkansızdır"
+        ],
+        correct: [0], lo: "FL-1.3.1", k: "K2"
+      },
+      {
+        q: "Yemek siparişi için mobil uygulama geliştiren bir ekipte çalıştığınızı varsayın. Mevcut döngüde ekip ödeme fonksiyonunu hayata geçirmeye karar verdi.\n\nAşağıdaki aktivitelerden hangisi test analizinin bir parçasıdır?",
+        options: [
+          "Ödeme hizmeti entegrasyonunu test etmenin 8 adam/gün süreceğini tahmin etmek",
+          "Ödemenin birden fazla kullanıcı arasında düzgün bir şekilde paylaştırılıp paylaştırılmadığını test etmeye karar vermek",
+          "Ödenmesi gereken minimum tutarın doğru şekilde işlenmesini kontrol edecek test senaryoları için sınır değer analizini (BVA) kullanarak test verisi oluşturmak",
+          "Kredi kartıyla ödeme sürecini kontrol eden bir test senaryosunu koşturduktan sonra gerçekleşen sonuç ile beklenen sonuç arasındaki uyumsuzluğu analiz etmek ve bir hata raporu oluşturmak"
+        ],
+        correct: [1], lo: "FL-1.4.1", k: "K2"
+      },
+      {
+        q: "Aşağıdaki faktörlerden hangileri (i-v) test süreci üzerinde ÖNEMLİ bir etkiye sahiptir?\n\ni. YGYD (Yazılım geliştirme yaşam döngüsü)\nii. Daha önceki projelerde tespit edilen hata sayısı\niii. Belirlenen ürün riskleri\niv. Yeni yasal düzenlemelerle resmi beyaz kutu testinin zorunlu kılınması\nv. Test ortamı kurulumu",
+        options: [
+          "i, ii",
+          "i, iii, iv",
+          "ii, iv, v",
+          "iii, v"
+        ],
+        correct: [1], lo: "FL-1.4.2", k: "K2"
+      },
+      {
+        q: "Aşağıdaki görevlerden HANGİ İKİSİ ESAS OLARAK bir test uzmanı rolüne aittir? (2 seçenek seçin)",
+        options: [
+          "Test ortamlarını yapılandırmak",
+          "Ürün backlog'unu (iş listesi) yönetmek",
+          "Yeni gereksinimler için çözümler tasarlamak",
+          "Test planını oluşturmak",
+          "Test esasını analiz etmek"
+        ],
+        correct: [0, 4], lo: "FL-1.4.5", k: "K2", multi: true
+      },
+      {
+        q: "Aşağıdaki becerilerden (i-v) hangileri bir test uzmanı için EN ÖNEMLİ becerilerdir?\n\ni. Alan (domain) bilgisine sahip olmak\nii. Ürünün vizyonunu belirlemek\niii. İyi bir takım oyuncusu olmak\niv. Ekibin çalışmalarını planlamak ve organize etmek\nv. Eleştirel düşünmek",
+        options: [
+          "ii ve iv önemlidir",
+          "i, iii ve v önemlidir",
+          "i, ii ve v önemlidir",
+          "iii ve iv önemlidir"
+        ],
+        correct: [1], lo: "FL-1.5.1", k: "K2"
+      },
+      {
+        q: "Aşağıdakilerden hangisi test uzmanları ve iş birimlerindeki arasındaki etkileşimlerde tüm ekip yaklaşımına (whole team approach) güzel bir örnektir?",
+        options: [
+          "İş birimleri test otomasyonuna karar verir",
+          "Test uzmanları, iş birimlerinin test stratejisini tanımlamasına yardımcı olur",
+          "İş birimleri, tüm ekip yaklaşımının bir parçası değildir",
+          "Test uzmanları, iş birimlerinin kabul testlerini oluşturmasına yardımcı olur"
+        ],
+        correct: [3], lo: "FL-1.5.2", k: "K1"
+      },
+      {
+        q: "\"Her YGYD (Yazılım Geliştirme Yaşam Döngüsü) aktivitesine karşılık gelen bir test aktivitesi vardır\".\n\nYukarıdaki kural hangi YGYD modellerinde geçerlidir?",
+        options: [
+          "Yalnızca sıralı YGYD modellerinde",
+          "Yalnızca döngüsel YGYD modellerinde",
+          "Yalnızca döngüsel ve sıralı YGYD modellerinde",
+          "Sıralı, artımlı ve döngüsel YGYD modellerinde"
+        ],
+        correct: [3], lo: "FL-2.1.2", k: "K1"
+      },
+      {
+        q: "Aşağıdaki ifadelerden hangisi Kabul Testi Odaklı Geliştirme (ATDD) yaklaşımını EN İYİ şekilde açıklar?",
+        options: [
+          "ATDD'de, kabul kriterleri genellikle given/when/then formatına göre oluşturulur",
+          "ATDD'de, test senaryoları esas olarak bileşen testinde oluşturulur ve kod odaklıdır",
+          "ATDD'de, testler yazılımın geliştirilmesini yönlendirmek için kabul kriterlerine göre oluşturulur",
+          "ATDD'de, testler sistem davranışına dayanır, bu da ekip üyelerinin testleri anlamasını kolaylaştırır"
+        ],
+        correct: [2], lo: "FL-2.1.3", k: "K1"
+      },
+      {
+        q: "Aşağıdakilerden hangisi \"shift-left\" yaklaşımının bir örneği DEĞİLDİR?",
+        options: [
+          "Kullanıcı gereksinimlerini paydaşların kabulünden önce gözden geçirmek",
+          "İlgili kod yazılmadan önce bir bileşen testi yazmak",
+          "Bileşen testi sırasında performans testi koşmak",
+          "Yapılandırma yönetim sürecini kurmadan önce bir test betiği (script) yazmak"
+        ],
+        correct: [3], lo: "FL-2.1.5", k: "K2"
+      },
+      {
+        q: "Yöneticinizi her sürüm döngüsü sonunda geriye dönük toplantılar (retrospective) yapmaya ikna etmek istediğinizi varsayın. Bunun için aşağıdaki argümanlardan hangisini kullanırdınız?",
+        options: [
+          "Retrospektifler günümüzde çok popülerdir ve süreçlerimize eklersek müşteriler bundan memnun olurlar",
+          "Retrospektifleri hayata geçirmek şirketimize tasarruf sağlar, çünkü bunlar olmadan son kullanıcılar ürün hakkında anında geri bildirim sağlayamaz",
+          "Retrospektif sırasında süreçlerdeki eksiklikler analiz edilebilir ve organizasyonun sürekli süreç iyileştirme için yapacağı iyileştirmeler bulunabilir.",
+          "Retrospektifler organizasyonda sürekli iyileştirmeyi sürdürmek için çok önemli olan cesaret ve saygı dahil beş değeri benimser"
+        ],
+        correct: [2], lo: "FL-2.1.6", k: "K2"
+      },
+      {
+        q: "Aşağıdaki hangi hata türleri (1-4) hangi test seviyeleriyle (A-D) EN ÇOK ilgilidir?\n\n1. Kullanıcı ihtiyaçlarının karşılanamaması ile ilgili hatalar\n2. Bileşenler arasındaki iletişim hataları\n3. Bir modülün iç çalışma mantığındaki hatalar\n4. Sistemde iş kurallarının doğru uygulanmaması ile ilgili hatalar\n\nA. Bileşen testi\nB. Bileşen entegrasyon testi\nC. Sistem testi\nD. Kabul testi",
+        options: [
+          "1D, 2B, 3A, 4C",
+          "1D, 2B, 3C, 4A",
+          "1B, 2A, 3D, 4C",
+          "1C, 2B, 3A, 4D"
+        ],
+        correct: [0], lo: "FL-2.2.1", k: "K2"
+      },
+      {
+        q: "Üç kabul kriterine sahip olan (AC1, AC2 ve AC3) bir kullanıcı hikayesini test ettiğinizi varsayın.\n\nAC1 - TC1 test senaryosu ile, AC2 - TC2 senaryosu ile ve AC3 - TC3 senaryosu ile karşılanmaktadır. Test koşum geçmişi, yazılımın üç ardışık sürümünde aşağıdaki gibi üç test koşumunu içermektedir:\n\n        Koşum 1       Koşum 2       Koşum 3\nTC1   (1) Başarısız  (4) Başarılı  (7) Başarılı\nTC2   (2) Başarılı   (5) Başarısız (8) Başarılı\nTC3   (3) Başarısız  (6) Başarısız (9) Başarılı\n\nBulunan tüm hatalar düzeltildiğinde ve yazılımın yeni bir sürümü geldiğinde testler tekrarlanır.\n\nYukarıdaki testlerden hangileri regresyon testi olarak koşturulmuştur?",
+        options: [
+          "Sadece 4, 7, 8, 9",
+          "Sadece 5, 7",
+          "Sadece 4, 6, 8, 9",
+          "Sadece 5, 6"
+        ],
+        correct: [1], lo: "FL-2.2.3", k: "K2"
+      },
+      {
+        q: "Aşağıdakilerden hangisi statik testin faydalarından biri DEĞİLDİR?",
+        options: [
+          "Hataların YGYD'nün (Yazılım Geliştirme Yaşam Döngüsü) ilerleyen aşamalarında tespit edilmesini kolaylaştırdığı için, daha az maliyetli hata yönetimine sahip olmak",
+          "Statik test sırasında bulunan hataları düzeltmenin genellikle dinamik test sırasında bulunan hataları düzeltmekten çok daha ucuz olması",
+          "Dinamik testte bulunamayacak kodlama hatalarını bulmak",
+          "Gereksinimlerdeki eksiklikleri ve tutarsızlıkları tespit etmek"
+        ],
+        correct: [0], lo: "FL-3.1.2", k: "K2"
+      },
+      {
+        q: "Aşağıdakilerden hangisi erken ve sık geri bildirimin faydalarından biridir?",
+        options: [
+          "Sonraki projelerde test sürecinin iyileştirilmesini sağlar",
+          "Müşterilerin, üzerinde anlaşılan risklere göre gereksinimleri önceliklendirmelerini sağlar",
+          "Değişikliklerin kalitesini ölçmenin tek yoludur",
+          "Gereksinimler konusunda yanlış anlaşılmaları önlemeye yardımcı olur"
+        ],
+        correct: [3], lo: "FL-3.2.1", k: "K1"
+      },
+      {
+        q: "Şirketinizde kullanılan gözden geçirmelerin aşağıdaki özelliklere sahip olduğunu varsayın:\n• Bir katip (scribe) rolü vardır\n• Asıl amaç kaliteyi değerlendirmektir\n• Gözden geçirme toplantıları, çalışma ürününün yazarı tarafından yönetilir\n• Bireysel hazırlık vardır\n• Bir inceleme raporu hazırlanır\n\nBuna göre, aşağıdaki gözden geçirme türlerinden hangisi EN ÇOK kullanılıyordur?",
+        options: [
+          "Gayri resmi gözden geçirme (Informal review)",
+          "Üzerinden geçme (Walkthrough)",
+          "Teknik gözden geçirme (Technical review)",
+          "Teftiş (Inspection)"
+        ],
+        correct: [1], lo: "FL-3.2.4", k: "K2"
+      },
+      {
+        q: "Bu ifadelerden hangisi başarılı gözden geçirmelere katkıda bulunan bir faktör DEĞİLDİR?",
+        options: [
+          "Katılımcılar gözden geçirme için yeterli zaman ayırmalıdır",
+          "Gerekli eforu azaltmak için büyük iş ürünleri küçük parçalara bölünmelidir.",
+          "Katılımcılar diğer katılımcılara karşı negatif davranışlardan kaçınmalıdır",
+          "Bulunan hatalar hiç koşulsuz kabul edilmeli, takdir edilmeli ve nesnel olarak ele alınmalıdır"
+        ],
+        correct: [3], lo: "FL-3.2.5", k: "K1"
+      },
+      {
+        q: "Aşağıdakilerden hangisi tecrübeye dayalı test tekniklerinin bir özelliğidir?",
+        options: [
+          "Test senaryoları ayrıntılı tasarım bilgilerine dayanarak oluşturulur",
+          "Ara yüzler kod bölümünde test edilen öğelerin kapsamını ölçmek için kullanılır",
+          "Bu tür teknikler büyük ölçüde test uzmanının yazılım ve alan bilgisine dayanır",
+          "Test senaryoları gereksinimlerden sapmaları belirlemek için kullanılır"
+        ],
+        correct: [2], lo: "FL-4.1.1", k: "K2"
+      },
+      {
+        q: "Basit bir emlak arama formunu test ettiğinizi varsayın. Formda yalnızca iki arama kriteri var:\n• kat (üç olası seçenek: zemin kat; birinci kat; ikinci kat+)\n• bahçe tipi (üç olası seçenek: bahçesiz; küçük bahçe; büyük bahçe)\n\nSadece zemin kattaki dairelerin bahçesi vardır. Formda, bu kuralı ihlal eden arama kriterlerini kullanmanıza izin vermeyecek bir doğrulama mekanizması bulunmaktadır.\n\nHer testin iki giriş değeri vardır: kat ve bahçe tipi. Testlerinizde her katı ve her bahçe tipini kapsayacak şekilde denklik paylarına ayırma tekniğini (EP) uygulamak istiyorsunuz.\n\n%100 EP kapsamına ulaşmak için gereken minimum test senaryosu sayısı nedir?",
+        options: ["3", "4", "5", "6"],
+        correct: [1], lo: "FL-4.2.1", k: "K3"
+      },
+      {
+        q: "Bir öğrencinin final ders notunu hesaplayan bir sistemi test ettiğinizi varsayın.\n\nFinal notu, aşağıdaki kurallara göre verilmektedir:\n• 0 – 50 puan: başarısız\n• 51 – 60 puan: geçer\n• 61 – 70 puan: orta\n• 71 – 80 puan: iyi\n• 81 – 90 puan: çok iyi\n• 91 – 100 puan: mükemmel\n\nAşağıdaki test senaryoları setini hazırladığınızı varsayın:\n     SONUÇ    FİNAL NOTU\nTC1   91      mükemmel\nTC2   50      başarısız\nTC3   81      çok iyi\nTC4   60      geçer\nTC5   70      orta\nTC6   80      iyi\n\nBu test senaryolarına göre elde edilen 2-değerli Sınır Değer Analizi (BVA) kapsamı nedir?",
+        options: ["%50", "%60", "%33.3", "%100"],
+        correct: [0], lo: "FL-4.2.2", k: "K3"
+      },
+      {
+        q: "En sevdiğiniz günlük bisiklet kiralama mağazası yeni bir Müşteri İlişkileri Yönetimi (CRM) sistemini tanıttı ve en sadık üyelerinden biri olan sizden bunu test etmenizi istedi.\n\nSistemin özellikleri şu şekildedir:\n• Herkes bisiklet kiralayabilir, sadece üyeler %20 indirim alır\n• Fakat, iade süresi kaçırılırsa indirim artık geçerli olmaz\n• 15 kiralamada üyelere bir hediye verilir: 1 adet Tişört\n\nKarar tablosu:\nKoşullar                 R1  R2  R3  R4  R5  R6  R7  R8\nÜye mi?                  T   T   T   T   F   F   F   F\nİade süresini kaçırdı mı? T   F   T   F   T   F   F   T\n15. kiralama mı?         F   F   T   T   F   F   T   T\nAksiyonlar\n%20 indirim                  X       X\nHediye Tişört                    X   X                   X\n\nYukarıda listelenen koşullardan hangisi imkansız bir durumu tanımlar?",
+        options: ["R4", "R2", "R6", "R8"],
+        correct: [3], lo: "FL-4.2.3", k: "K3"
+      },
+      {
+        q: "Aşağıda gösterilen durum geçiş diyagramı ile modellenen yaşam döngüsüne sahip bir sistemi test ettiğinizi varsayın.\n\nSistem BAŞLANGIÇ durumunda başlar ve çalışmasını KAPALI durumunda sonlandırır.\n\nDurum geçişleri:\n• BAŞLANGIÇ --koş--> OPERASYONDA\n• OPERASYONDA --hata--> HATA AYIKLAMA MODU\n• OPERASYONDA --durdur--> BEKLEMEDE\n• BEKLEMEDE --devam et--> OPERASYONDA\n• BEKLEMEDE --tamamlandı--> KAPALI\n• HATA AYIKLAMA MODU --test--> HATA AYIKLAMA MODU (döngü)\n• HATA AYIKLAMA MODU --tamamlandı--> KAPALI\n\nGeçerli geçiş kapsamını elde etmek için en az kaç test senaryosuna ihtiyaç vardır? (Test senaryoları birden fazla geçişi kapsayabilir.)",
+        options: ["4", "2", "7", "3"],
+        correct: [3], lo: "FL-4.2.4", k: "K3"
+      },
+      {
+        q: "Test takımınız %100 komut (statement) kapsamına ulaştığında elde edilen çıkarım nedir?",
+        options: [
+          "Her komutun en az bir kez çalıştırıldığı",
+          "Koştuğunuz test grubundan daha fazla test senaryosuna sahip herhangi bir test grubunun da %100 komut (statement) kapsamına ulaşabileceği",
+          "Koddaki her yolun (path) en az bir kez çalıştırıldığı",
+          "Girdilerin her kombinasyonunun en az bir kez test edilmiş olduğu"
+        ],
+        correct: [0], lo: "FL-4.3.1", k: "K2"
+      },
+      {
+        q: "Aşağıdakilerden hangisi beyaz kutu testi için YANLIŞTIR?",
+        options: [
+          "Beyaz kutu testi sırasında yazılımın iç çalışma mantığı dikkate alınır",
+          "Beyaz kutu testi kapsam ölçümleri, kod kapsamını artırmak için ek testlerin belirlenmesine yardımcı olabilir",
+          "Beyaz kutu test teknikleri statik testte kullanılabilir",
+          "Beyaz kutu testi, gereksinimlerdeki eksikliklerin belirlenmesine yardımcı olabilir."
+        ],
+        correct: [3], lo: "FL-4.3.3", k: "K2"
+      },
+      {
+        q: "Aşağıdakilerden hangisi hata tahmininin (error guessing) ardındaki mantığı EN İYİ şekilde açıklar?",
+        options: [
+          "Hata tahmini, geçmişte bulunan hatalar ve geliştiriciler tarafından yapılan tipik hatalar hakkındaki bilgi ve deneyimi kullanmayı içerir",
+          "Hata tahmini, geliştirme konusundaki kişisel deneyiminizi ve bir geliştirici olarak yaptığınız hataları kullanmayı içerir",
+          "Hata tahmini, test nesnesinin kullanıcısı olduğunuzu hayal etmenizi ve kullanıcının etkileşim sırasında yapabileceği hataları tahmin etmenizi gerektirir",
+          "Hata tahmini, bir geliştiricinin yapabileceği hata türlerini belirlemek için geliştirme görevini hızla tekrarlamanızı gerektirir"
+        ],
+        correct: [0], lo: "FL-4.4.1", k: "K2"
+      },
+      {
+        q: "Uygulamanızın canlıya alınmasında gecikme olduğunu ve test koşumunun geç başladığını varsayın. Test uzmanı olarak uygulamanızın alan bilgisine ve iyi analiz becerilerine sahipsiniz. Henüz gereksinimlerin tam listesi sizinle paylaşılmadı, ama yönetim uygulamayla ilgili bazı test sonuçlarının sunulmasını sizden bekliyor.\n\nBu durumda hangi test tekniğini kullanmanız EN UYGUN olur?",
+        options: [
+          "Kontrol listesine dayalı test",
+          "Hata tahmini",
+          "Keşif testi",
+          "Dal testi"
+        ],
+        correct: [2], lo: "FL-4.4.2", k: "K2"
+      },
+      {
+        q: "Aşağıdakilerden hangisi kabul kriterlerinin EN İYİ şekilde dokümante edilme yöntemidir?",
+        options: [
+          "Kullanıcı hikayesini dokümante etmek için retrospektifler gerçekleştirmek",
+          "Kullanıcı hikayesiyle ilgili örnek bir test koşulunu tanımlamak için given/when/then formatını kullanmak",
+          "Kabul kriterlerinin başkaları tarafından yanlış anlaşılma riskini azaltmak için sözlü iletişimi kullanmak",
+          "Belirli bir kullanıcı hikayesiyle ilgili riskleri test planında dokümante ederek, risk tabanlı testleri kolaylaştırmak"
+        ],
+        correct: [1], lo: "FL-4.5.2", k: "K2"
+      },
+      {
+        q: "Aşağıdaki kullanıcı hikayesini ele alın:\n\n\"Bir Editör olarak\nİçeriği yayınlanmadan önce incelemek istiyorum\nböylece dil bilgisinin doğru olduğundan emin olabilirim\"\n\nBu kullanıcı hikayesinin kabul kriterleri:\n• Kullanıcı \"Editör\" rolüyle içerik yönetim sistemine giriş yapabilir\n• Editör mevcut içerik sayfalarını görüntüleyebilir\n• Editör sayfa içeriğini düzenleyebilir\n• Editör yorumlar ekleyebilir\n• Editör değişiklikleri kaydedebilir\n• Editör güncelleme yapmak için \"içerik sahibi\" rolüne yeniden atayabilir\n\nAşağıdakilerden hangisi bu kullanıcı hikayesi için bir ATDD (kabul testi odaklı geliştirme) testinin EN İYİ örneğidir?",
+        options: [
+          "Editörün sayfa içeriğini düzenledikten sonra belgeyi kaydedip kaydedemeyeceğinin test edilmesi",
+          "İçerik sahibinin giriş yapıp içerikte güncelleme yapıp yapamayacağının test edilmesi",
+          "Editörün düzenlenen içeriği yayınlanmak üzere planlamaya alıp alamayacağının test edilmesi",
+          "Editörün güncelleme yapmak için başka bir editöre yeniden atama yapıp yapamayacağının test edilmesi"
+        ],
+        correct: [0], lo: "FL-4.5.3", k: "K3"
+      },
+      {
+        q: "Test uzmanları döngü ve sürüm planlamasına nasıl değer katar?",
+        options: [
+          "Test uzmanları geliştirilecek kullanıcı hikayelerinin önceliğini belirler",
+          "Test uzmanları yalnızca test edilecek sistemin fonksiyonel yönlerine odaklanır",
+          "Test uzmanları kullanıcı hikayelerinin ayrıntılı risk tanımlamasına ve risk değerlendirmesine katılır",
+          "Test uzmanları sürüm planlaması sırasında erken test tasarımı yaparak yüksek kaliteli yazılımın yayınlanmasını garanti eder"
+        ],
+        correct: [2], lo: "FL-5.1.2", k: "K1"
+      },
+      {
+        q: "Aşağıdaki seçeneklerden HANGİ İKİSİ bir sistemi test etmek için çıkış kriteri olarak kullanılabilir? (2 seçenek seçin)",
+        options: [
+          "Test ortamının hazır olması",
+          "Test uzmanının test nesnesine login olabilmesi",
+          "Tahmin edilen hata yoğunluğuna ulaşılması",
+          "Gereksinimlerin given/when/then formatında yazılması",
+          "Regresyon testlerinin otomatize edilmesi"
+        ],
+        correct: [2, 4], lo: "FL-5.1.3", k: "K2", multi: true
+      },
+      {
+        q: "Ekibiniz yeni bir yüksek riskli özelliğin test eforunun tahminlemesinde üç-nokta tahmin tekniğini kullanıyor. Buna göre aşağıdaki tahminler yapılmıştır:\n• En iyimser tahmin: 2 adam-saat\n• En olası tahmin: 11 adam-saat\n• En kötümser tahmin: 14 adam-saat\n\nBu veriler baz alınarak elde edilecek efor tahmini ne olmalıdır?",
+        options: ["9 adam-saat", "14 adam-saat", "11 adam-saat", "10 adam-saat"],
+        correct: [3], lo: "FL-5.1.4", k: "K3"
+      },
+      {
+        q: "Kullanıcıların yakınlarındaki restoranları bulmalarını sağlayan bir mobil uygulamayı test ettiğinizi varsayın.\n\nTest senaryosu | Test koşulu       | Öncelik | Bağımlılık\nTS 001         | Yemek türünü seç  | 3       | hiçbiri\nTS 002         | Restoran seç      | 2       | TS 001\nTS 003         | Yol tarifi al     | 1       | TS 002\nTS 004         | Restoranı ara     | 2       | TS 002\nTS 005         | Rezervasyon yap   | 3       | TS 002\n\nYukarıdaki tablo göz önünde bulundurularak, aşağıdaki test senaryolarından hangisi ÜÇÜNCÜ sırada koşturulmalıdır?",
+        options: ["TS 003", "TS 005", "TS 002", "TS 001"],
+        correct: [0], lo: "FL-5.1.5", k: "K3"
+      },
+      {
+        q: "Aşağıdaki test kategorilerini (1-4) ve çevik test kadranlarını (A-D) göz önünde bulundurarak:\n\n1. Kullanılabilirlik testi\n2. Bileşen testi\n3. Fonksiyonel test\n4. Güvenilirlik testi\n\nA. Çevik test kadranı Q1: teknoloji odaklı, geliştirme ekibini destekleyen\nB. Çevik test kadranı Q2: iş odaklı, geliştirme ekibini destekleyen\nC. Çevik test kadranı Q3: iş odaklı, ürünü eleştiren\nD. Çevik test kadranı Q4: teknoloji odaklı, ürünü eleştiren\n\nTest kategorileri, çevik test kadranlarıyla nasıl eşlenir?",
+        options: [
+          "1C, 2A, 3B, 4D",
+          "1D, 2A, 3C, 4B",
+          "1C, 2B, 3D, 4A",
+          "1D, 2B, 3C, 4A"
+        ],
+        correct: [0], lo: "FL-5.1.7", k: "K2"
+      },
+      {
+        q: "Bir risk analizi sırasında aşağıdaki risk tanımlanmış ve değerlendirilmiştir:\n• Risk: Rapor oluşturmak için geçen yanıt süresi çok uzun\n• Risk olasılığı: orta; risk etkisi: yüksek\n• Riski ele alma yöntemi:\n  o Bağımsız bir test ekibi sistem testi sırasında performans testi gerçekleştirir\n  o Son kullanıcılardan seçilmiş bir örneklem, sürümden önce alfa ve beta kabul testi gerçekleştirir\n\nBu analiz edilen riske yanıt olarak hangi önlemin alınması öneriliyor?",
+        options: [
+          "Riskin kabulü",
+          "Acil durum planı",
+          "Riskin azaltılması",
+          "Riskin devredilmesi"
+        ],
+        correct: [2], lo: "FL-5.2.4", k: "K2"
+      },
+      {
+        q: "Hangi çalışma ürünü, bir çevik ekibin belirli bir döngü (sprint) için tamamlanan iş miktarını ve kalan toplam iş miktarını göstermek için kullanılabilir?",
+        options: [
+          "Kabul kriterleri",
+          "Hata raporu",
+          "Test tamamlama raporu",
+          "Burndown tablosu"
+        ],
+        correct: [3], lo: "FL-5.3.3", k: "K2"
+      },
+      {
+        q: "Yeni bir gereksinimle uyumlu olması için otomatik test betiklerinden (script) birini güncellemeniz gerekmektedir. Hangi işlem test deposunda test betiğinin yeni bir sürümünü oluşturduğunuzu gösterir?",
+        options: [
+          "İzlenebilirlik yönetimi",
+          "Bakım testi",
+          "Yapılandırma yönetimi",
+          "Gereksinim mühendisliği"
+        ],
+        correct: [2], lo: "FL-5.4.1", k: "K2"
+      },
+      {
+        q: "Yazılımcılardan, test raporunda açıklanan anormalliğin tekrarlanabilir olmadığını belirten aşağıdaki hata raporunu aldığınızı varsayın.\n\nUygulama kilitleniyor\n2022-May-03 – John Doe – Reddedildi\n\n\"Yeni kullanıcı oluşturma ekranındaki Ad alanına 'Test girişi: $ä' girildikten sonra uygulama kilitleniyor. Oturumu kapatmayı ve test_admin01 hesabıyla oturum açmayı denedim, aynı sorun devam etti. Diğer test hesaplarıyla denedim, aynı sorunla yine karşılaştım. Hiçbir hata mesajı alınmadı; sadece loglarda 'fatal error' kaydı gözüküyor (bakınız ek). TS-1305 test senaryosuna göre, uygulamanın sağlanan girişi kabul etmesi ve kullanıcıyı oluşturması gerekiyordu. Lütfen yüksek öncelikli olarak ele alın ve düzeltin, bu özellik kritik bir yeni iş gereksinimi olan REQ-0012 ile ilgilidir.\"\n\nBu test raporunda yazılımcılar için yararlı olabilecek hangi kritik bilgi EKSİKTİR?",
+        options: [
+          "Beklenen sonuç ve gerçekleşen sonuç",
+          "Referanslar ve hata durumu",
+          "Test ortamı ve test öğesi",
+          "Öncelik ve önem derecesi"
+        ],
+        correct: [2], lo: "FL-5.5.1", k: "K3"
+      },
+      {
+        q: "Test verisi hazırlama aracı hangi test aktivitesini destekler?",
+        options: [
+          "Test izleme ve kontrolü",
+          "Test analizi ve tasarımı",
+          "Testin uyarlanması ve koşulması",
+          "Test tamamlama"
+        ],
+        correct: [2], lo: "FL-6.1.1", k: "K2"
+      },
+      {
+        q: "Aşağıdakilerden hangisi test otomasyonu gerçekleştirmenin potansiyel riskini doğru bir şekilde açıklar?",
+        options: [
+          "Canlıda bilinmeyen etkilere neden olabilir",
+          "Testware'lerin bakımı için yeterli efor tahsis edilmeyebilir",
+          "Testleri hızlandırabilir",
+          "Manuel test için ayrılan süreyi azaltabilir"
+        ],
+        correct: [1], lo: "FL-6.2.1", k: "K1"
+      }
+    ]
+  },
+  B: {
+    title: "Örnek Sınav Set B",
+    questions: [
+      {
+        q: "Aşağıdakilerden hangisi testin neden gerekli olduğuna dair bir örnektir?",
+        options: [
+          "Dinamik testler, test nesnelerinin kullanıcıların asla sağlayamayacağı şekillerde başarısız olmasına neden olarak kaliteyi artırır.",
+          "Statik testler, yazılım geliştiriciler tarafından program kodlarındaki hataları dinamik testlerden daha erken tespit etmek için kullanılır.",
+          "Statik analiz, müşterilere hiçbir çıktı sağlamayan sistem unsurlarının piyasaya sürülmeye uygun olduğuna dair kanıt sağlar.",
+          "İncelemeler gereksinim spesifikasyonlarının kalitesini artırır ve elde edilen çalışma ürünlerinde daha az değişikliğe ihtiyaç duyulmasını sağlar."
+        ],
+        correct: [3], lo: "FL-1.2.1", k: "K2"
+      },
+      {
+        q: "Kalite güvencesi (QA) ve/veya kalite kontrolü (QC) ile ilgili aşağıdaki ifadelerden hangisi doğrudur?",
+        options: [
+          "Kalite güvencesi, testin bir parçası olarak gerçekleştirilir.",
+          "Testler, kalite kontrolünün bir parçası olarak gerçekleştirilir.",
+          "Test, kalite kontrolünün bir diğer adıdır.",
+          "Testler, kalite güvencesinin bir parçası olarak gerçekleştirilir."
+        ],
+        correct: [1], lo: "FL-1.2.2", k: "K1"
+      },
+      {
+        q: "\"Test ilkeleri\"nden biri, yazılımı %100 test etmenin imkansız olduğunu belirtir.\n\nAşağıdakilerden hangisi bu ilkenin pratikte uygulanmasına bir örnektir?",
+        options: [
+          "Test senaryolarının belirlenmiş her olası çıktıyı kapsayacak şekilde oluşturulması",
+          "Tüm olası test girdisi varyasyonlarının dokümante edilmesi ve bunların önem sırasına göre önceliklendirilmesi",
+          "İncelemeler ve diğer statik test yaklaşımları ile testlere mümkün olduğunca erken başlanması",
+          "Test senaryoların oluşturulması için denklik paylarına ayırma ve sınır değer analizinin kullanılması"
+        ],
+        correct: [3], lo: "FL-1.3.1", k: "K2"
+      },
+      {
+        q: "Aşağıdakilerden hangi test aktivitesi, test verisi gereksinimleri, test koşulları, test ortamı gereksinimleri ve test senaryoları ile çalışmayı içerir?",
+        options: [
+          "Test tasarımı",
+          "Test koşumu",
+          "Test analizi",
+          "Test uyarlaması"
+        ],
+        correct: [0], lo: "FL-1.4.1", k: "K2"
+      },
+      {
+        q: "Aşağıdakilerden hangisinin belirli bir test nesnesi için testin nasıl gerçekleştirildiğini etkileme olasılığı EN YÜKSEKTİR?",
+        options: [
+          "Organizasyonun pazarlama ekibinin ortalama deneyim seviyesi",
+          "Kullanıcıların kendileri için yeni bir sistem geliştirildiğini bilmeleri",
+          "Test ekibi üyelerinin kaç yıllık deneyime sahip olduğu",
+          "Ticari bir müzik dinleme uygulaması için son kullanıcının organizasyon yapısı"
+        ],
+        correct: [2], lo: "FL-1.4.2", k: "K2"
+      },
+      {
+        q: "Aşağıdaki ifadelerden hangisi izlenebilirliğin önemine ilişkin DOĞRU bir örnektir?",
+        options: [
+          "Azaltılan riskler ve başarılı test senaryoları arasındaki izlenebilirlik, kalan risk seviyesinin belirlenmesini sağlar.",
+          "Kullanıcı gereksinimleri ve test uyarlama sonuçları arasındaki izlenebilirlik, projenin iş hedeflerine göre ilerlemesinin ölçülebilmesini sağlar.",
+          "Test uzmanları ve başarısız test senaryoları arasındaki izlenebilirlik, test uzmanlarının beceri düzeyinin belirlenebilmesini sağlar.",
+          "Belirlenen riskler ve yazılı test koşulları arasındaki izlenebilirlik, hangi risklerin test edilmeye değer olduğunun belirlenebilmesini sağlar."
+        ],
+        correct: [1], lo: "FL-1.4.4", k: "K2"
+      },
+      {
+        q: "Aşağıdakilerden hangisi bir test uzmanının test yaparken genel becerileri kullanmasına EN UYGUN örnektir?",
+        options: [
+          "Test uzmanının çeşitli bilgisayar oyunları hakkındaki geniş bilgisi sebebiyle oyunlarla ilgilenen geliştiricilerden biriyle iyi geçinmesi",
+          "Test uzmanının eskiden pilot olması sebebiyle helikopter kontrol sistemi için kabul kriterlerini daha iyi anlayabilmesi",
+          "Test uzmanının önceden programcı olarak çalışması sebebiyle bu alandaki becerilerinin yardımıyla iş analistleriyle daha iyi iletişim kurması",
+          "Test uzmanının, keşif testi oturumuna başlamadan önce test senaryolarını metodik olarak oluştururken hata yapmamaya çok dikkat etmesi"
+        ],
+        correct: [1], lo: "FL-1.5.1", k: "K2"
+      },
+      {
+        q: "Aşağıdakilerden hangisi tüm ekip yaklaşımının avantajlarından biridir?",
+        options: [
+          "Ekip üyelerinin herhangi bir zamanda herhangi bir rolü üstlenmesine olanak tanır.",
+          "Tüm geliştirme projesini desteklemek için yalnızca tek bir ekibe ihtiyaç duyar.",
+          "İş temsilcilerini geliştiricilerle aynı ekibe dahil eder.",
+          "Tüm projeye fayda sağlayan bir ekip sinerjisi oluşturur."
+        ],
+        correct: [3], lo: "FL-1.5.2", k: "K1"
+      },
+      {
+        q: "Yazılım Geliştirme Yaşam Döngüsü çeşitleri ile ilgili aşağıdaki ifadelerden hangisi DOĞRUDUR?",
+        options: [
+          "Çevik yazılım geliştirme kullanılıyorsa, sistem testi otomasyonu regresyon testi ihtiyacının yerini alır.",
+          "Sıralı bir yazılım geliştirme modeli kullanılıyorsa, dinamik testler genellikle yaşam döngüsünün ilerleyen aşamalarıyla sınırlandırılır.",
+          "Yinelemeli bir yazılım geliştirme modeli kullanılıyorsa, bileşen testleri genellikle geliştiriciler tarafından manuel olarak gerçekleştirilir.",
+          "Artımlı bir yazılım geliştirme modeli kullanılıyorsa, statik testler erken aşamalarda, dinamik testler ise sonraki aşamalarda yapılır."
+        ],
+        correct: [1], lo: "FL-2.1.1", k: "K2"
+      },
+      {
+        q: "Aşağıdakilerden hangisi tüm Yazılım Geliştirme Yaşam Döngüsü modelleri için geçerli olan iyi bir test uygulamasıdır?",
+        options: [
+          "Test uzmanları, çalışma ürünlerini bir sonraki geliştirme aşamasının bir parçası olarak gözden geçirmelidir.",
+          "Test uzmanları, çalışma ürünlerini taslaklar hazır olur olmaz gözden geçirmelidir.",
+          "Test uzmanları, çalışma ürünlerini test analizi ve tasarımına başlamadan önce gözden geçirmelidir.",
+          "Test uzmanları çalışma ürünlerini yayınlandıktan hemen sonra gözden geçirmelidir."
+        ],
+        correct: [1], lo: "FL-2.1.2", k: "K1"
+      },
+      {
+        q: "Aşağıdakilerden hangisi test öncelikli geliştirme yaklaşımına bir örnektir?",
+        options: [
+          "Test Güdümlü Geliştirme",
+          "Kapsama Güdümlü Geliştirme",
+          "Kalite Güdümlü Geliştirme",
+          "Özellik Güdümlü Geliştirme"
+        ],
+        correct: [0], lo: "FL-2.1.3", k: "K1"
+      },
+      {
+        q: "DevOps ile ilgili aşağıdaki ifadelerden hangisi DOĞRUDUR?",
+        options: [
+          "Sürümleri hızlandırmak amacıyla, bileşen testlerini tamamlamaya gerek kalmadan geliştiricileri hızlı bir şekilde kod göndermeye teşvik etmek için sürekli entegrasyon kullanılır.",
+          "Yazılımları daha sık güncellemek ve piyasaya sürmek için, regresyon tehlikesini azaltmak için birçok otomatize regresyon testi gereklidir.",
+          "Test uzmanları, geliştiricilere ve operatörlere eşit davranmak amacıyla, shift-right yaklaşımını kullanarak, operatörler tarafından gerçekleştirilen sürüm testine daha fazla efor harcayacaktır.",
+          "Test uzmanları, geliştiriciler ve operatörler arasında daha fazla sinerji yaratmak için testler, manuel test olmadan tamamen otomatize hale getirilmelidir."
+        ],
+        correct: [1], lo: "FL-2.1.4", k: "K2"
+      },
+      {
+        q: "Aşağıdakilerden hangisinin sistem testinin bir parçası olarak gerçekleştirilme olasılığı EN YÜKSEKTİR?",
+        options: [
+          "Bağımsız bir test ekibi tarafından gerçekleştirilen bir kredi yönetim sisteminin güvenlik testi",
+          "Bir döviz bozdurma sisteminin harici bir bankacılık sistemi ile arayüzünün test edilmesi",
+          "Eğitim yazılımı geliştiricileri tarafından bir uzaktan eğitim sisteminin beta testi",
+          "Bir insan kaynakları sisteminin kullanıcı arayüzü ve veri tabanı arasındaki etkileşimlerin test edilmesi"
+        ],
+        correct: [0], lo: "FL-2.2.1", k: "K2"
+      },
+      {
+        q: "Aşağıdaki ifadelerden hangisi DOĞRUDUR?",
+        options: [
+          "Regresyon testlerinin sayısı proje ilerledikçe artarken, onaylama testlerinin sayısı proje ilerledikçe azalır.",
+          "Regresyon testleri test nesnesi sabitlendiğinde oluşturulur ve çalıştırılır, onaylama testleri ise test nesnesi geliştirildiğinde çalıştırılır.",
+          "Regresyon testi, operasyonel ortamın değişmeden kaldığını kontrol etmekle ilgiliyken, onaylama testi test nesnesindeki değişiklikleri test etmekle ilgilidir.",
+          "Regresyon testi değişmeyen koddaki olumsuz etkilerle ilgilenirken, onaylama testi değişen kodun test edilmesiyle ilgilenir."
+        ],
+        correct: [3], lo: "FL-2.2.3", k: "K2"
+      },
+      {
+        q: "Aşağıdakilerden hangisi statik test ile bulunabilirken dinamik test ile bulunamayan bir hataya örnektir?",
+        options: [
+          "Kullanıcı arayüzünde oluşan kullanılabilirlik eksikliği",
+          "Kendisine ulaşan bir yol olmayan kod",
+          "Beklenen kullanıcıların çoğu için zayıf yanıt süreleri",
+          "Kodda uygulanmayan gerekli özellikler"
+        ],
+        correct: [1], lo: "FL-3.1.3", k: "K2"
+      },
+      {
+        q: "Aşağıdakilerden hangisi paydaşlardan erken ve sık sık geri bildirim almanın faydalarından biridir?",
+        options: [
+          "Yöneticiler hangi geliştiricilerin daha az üretken olduğunun farkına varır.",
+          "Proje yöneticilerinin paydaş etkileşimlerine öncelik vermelerini sağlar.",
+          "Potansiyel kalite sorunlarının erken iletişimini kolaylaştırır.",
+          "Son kullanıcılar çalışma ürününün tesliminin neden geciktiğini daha iyi anlar."
+        ],
+        correct: [2], lo: "FL-3.2.1", k: "K1"
+      },
+      {
+        q: "Aşağıdaki verilen görev tanımları, hangi gözden geçirme faaliyetleriyle EN İYİ eşleşir?\n\n1. Değerlendirilecek kalite özellikleri ve çıkış kriterleri seçilir.\n2. Herkesin çalışma ürünlerine erişimi vardır.\n3. Çalışma ürünlerinde anormallikler tespit edilir.\n4. Anomaliler tartışılır.\n\nA. Bireysel gözden geçirme\nB. Gözden geçirmeyi başlatma\nC. Planlama\nD. İletişim ve analiz",
+        options: [
+          "1B, 2C, 3D, 4A",
+          "1B, 2D, 3C, 4A",
+          "1C, 2A, 3B, 4D",
+          "1C, 2B, 3A, 4D"
+        ],
+        correct: [3], lo: "FL-3.2.2", k: "K2"
+      },
+      {
+        q: "Aşağıda verilen görev tanımları, hangi rol ve sorumluluklarla EN İYİ şekilde eşleşir?\n\n1. Katip (Scribe)\n2. Gözden geçirme lideri\n3. Kolaylaştırıcı\n4. Yönetici\n\nA. Gözden geçirme toplantılarının etkin bir şekilde yürütülmesini ve güvenli bir gözden geçirme ortamının oluşturulmasını sağlar.\nB. Gözden geçirme toplantısı sırasında bulunan kararlar ve yeni anomaliler gibi inceleme bilgilerini kaydeder.\nC. Neyin gözden geçirileceğine karar verir ve gözden geçirme için personel ve zaman gibi kaynakları sağlar.\nD. Gözden geçirmenin ne zaman ve nerede yapılacağını organize etmek gibi gözden geçirmenin genel sorumluluğunu üstlenir.",
+        options: [
+          "1A, 2B, 3D, 4C",
+          "1A, 2C, 3B, 4D",
+          "1B, 2D, 3A, 4C",
+          "1B, 2D, 3C, 4A"
+        ],
+        correct: [2], lo: "FL-3.2.3", k: "K1"
+      },
+      {
+        q: "Aşağıdaki ifadelerden hangisi karar tablosu testi ile dal testi arasındaki farkı EN İYİ şekilde açıklar?",
+        options: [
+          "Karar tablosu testinde, test senaryoları koddaki karar ifadelerinden türetilir. Dal testinde, test senaryoları test nesnesinin kontrol akışı bilgisinden türetilir.",
+          "Karar tablosu testinde, test senaryoları iş mantığını tanımlayan spesifikasyondan türetilir. Dal testinde, test senaryoları kaynak koddaki olası hataların öngörülmesine dayanır.",
+          "Karar tablosu testinde, test senaryoları test nesnesinin kontrol akışı bilgisinden türetilir. Dal testinde, test senaryoları iş mantığını tanımlayan spesifikasyondan türetilir.",
+          "Karar tablosu testinde, test senaryoları yazılımın nasıl uygulandığından bağımsızdır. Dal testinde, test senaryoları ancak kodun tasarımından veya uygulanmasından sonra oluşturulabilir."
+        ],
+        correct: [3], lo: "FL-4.1.1", k: "K2"
+      },
+      {
+        q: "TestWash oto yıkama zincirinin müşterileri, o ana kadar satın aldıkları yıkama sayısının kaydedildiği kartlara sahiptir. Başlangıç değeri 0'dır. Oto yıkamaya girdikten sonra sistem karttaki sayıyı bir artırır. Bu değer mevcut yıkama sayısını temsil eder. Bu sayıya göre sistem müşterinin ne kadar indirim hakkı olduğuna karar verir.\n\nHer onuncu yıkamada sistem %10 indirim yapar ve her yirminci yıkamada sistem %40 daha indirim yapar (yani toplamda %50 indirim).\n\nAşağıdaki veri giriş setlerinden hangisi (mevcut yıkama sayıları) en yüksek denklik payı kapsamına ulaşır?",
+        options: [
+          "19, 20, 30",
+          "11, 12, 20",
+          "1, 10, 50",
+          "10, 29, 30, 31"
+        ],
+        correct: [0], lo: "FL-4.2.1", k: "K3"
+      },
+      {
+        q: "Girdi olarak verilen parolanın uzunluğunu doğrulayan bir formu test ediyorsunuz. Form, doğru uzunluktaki bir parolayı kabul eder ve çok kısa veya çok uzun bir parolayı reddeder. Parola uzunluğu 6 ila 12 karakter arasında ise parola doğrudur. Aksi takdirde, yanlış olarak kabul edilir.\n\nİlk başta form boştur (parola uzunluğu = 0). \"Parola uzunluğu\" değişkenine sınır değer analizi uyguladığınızı varsayın.\n\nTest senaryoları setiniz %100 2-değerli sınır değer kapsamına ulaşır. Ekip, bu bileşenin yüksek riski nedeniyle, %100 3-değerli sınır değer kapsamı sağlamak için test senaryolarının eklenmesi gerektiğine karar verir.\n\nBunu başarmak için aşağıdaki hangi ek parola uzunlukları test edilmelidir?",
+        options: [
+          "4, 5, 13, 14",
+          "7, 11",
+          "1, 5, 13",
+          "1, 4, 7, 11, 14"
+        ],
+        correct: [3], lo: "FL-4.2.2", k: "K3"
+      },
+      {
+        q: "Aşağıdaki karar tablosu ateroskleroz riskini belirlemeye yönelik kuralları içermektedir.\n\n                 Kural 1   Kural 2   Kural 3   Kural 4   Kural 5\nKolesterol(mg/dl) ≤124     ≤124      125-200   125-200   ≥201\nKan basıncı(mmHg) ≤140     >140      ≤140      >140      –\nRisk seviyesi     çok düşük düşük     orta      yüksek    çok yüksek\n\nTest senaryolarını aşağıdaki test girdi verileri ile tasarladınız:\nTC1: Kolesterol = 125 mg/dl, Kan basıncı = 141 mm Hg\nTC2: Kolesterol = 200 mg/dl, Kan basıncı = 201 mm Hg\nTC3: Kolesterol = 124 mg/dl, Kan basıncı = 201 mm Hg\nTC4: Kolesterol = 109 mg/dl, Kan basıncı = 200 mm Hg\nTC5: Kolesterol = 201 mg/dl, Kan basıncı = 140 mm Hg\n\nBu test senaryoları tarafından elde edilen karar tablosu kapsamı nedir?",
+        options: ["40%", "60%", "80%", "100%"],
+        correct: [1], lo: "FL-4.2.3", k: "K3"
+      },
+      {
+        q: "Bir depolama sistemi en fazla üç eleman depolayabilir ve aşağıdaki durum geçiş diyagramı ile modellenir. N değişkeni o anda depolanan elemanların sayısını temsil eder.\n\nDurum geçişleri:\n• START --Add / N:=1--> NOT FULL\n• NOT FULL --Add[N<2] / N:=N+1--> NOT FULL (self-loop)\n• NOT FULL --Add[N=2] / N:=N+1--> FULL\n• FULL --Remove / N:=N-1--> NOT FULL\n• NOT FULL --Remove[N>0] / N:=N-1--> NOT FULL (self-loop)\n\nOlay dizileri olarak temsil edilen aşağıdaki test senaryolarından hangisi EN YÜKSEK düzeyde geçerli geçiş kapsamına ulaşır?",
+        options: [
+          "Ekle, Kaldır, Ekle, Ekle, Ekle",
+          "Ekle, Ekle, Ekle, Kaldır, Kaldır",
+          "Ekle, Ekle, Ekle, Kaldır, Kaldır",
+          "Ekle, Ekle, Ekle, Kaldır, Ekle"
+        ],
+        correct: [2], lo: "FL-4.2.4", k: "K3"
+      },
+      {
+        q: "Aynı kod üzerinde T1 ve T2 olmak üzere iki test senaryosu çalıştırdığınızı varsayın. T1 testi %40 komut kapsamı ve T2 testi %65 komut kapsamı elde etti.\n\nAşağıdaki ifadelerden hangisi KESİNLİKLE doğrudur?",
+        options: [
+          "T1 ve T2 testlerinden oluşan test grubu %105 komut kapsamına ulaşır.",
+          "Hem T1 hem de T2 tarafından koşulmuş olması gereken en az bir komut vardır.",
+          "Test edilen koddaki komutların en az %5'i çalıştırılamaz.",
+          "T1 ve T2 testlerinden oluşan test grubu tam dal kapsamına ulaşır."
+        ],
+        correct: [1], lo: "FL-4.3.1", k: "K2"
+      },
+      {
+        q: "Dal kapsama metriği BCov = (X / Y) * %100 olarak tanımlandığını varsayın.\n\nBu formülde X ve Y neyi temsil etmektedir?",
+        options: [
+          "X = test senaryoları tarafından uygulanan karar sonuçlarının sayısı; Y = koddaki toplam karar sonucu sayısı",
+          "X = test senaryoları tarafından uygulanan koşullu dal sayısı; Y = koddaki toplam dal sayısı",
+          "X = test senaryoları tarafından uygulanan dal sayısı; Y = koddaki toplam dal sayısı",
+          "X = test senaryoları tarafından uygulanan koşullu dal sayısı; Y = koddaki toplam karar sonucu sayısı"
+        ],
+        correct: [2], lo: "FL-4.3.2", k: "K2"
+      },
+      {
+        q: "Keşif testlerini kullanmak için aşağıdaki ifadelerden hangi İKİ'si EN İYİ gerekçeleri sağlar? (2 seçenek seçin)",
+        options: [
+          "Test uzmanlarına test tasarımı ve testin yürütülmesi için yeterli zaman ayrılmamıştır.",
+          "Mevcut test stratejisi, test uzmanlarının resmi, kara kutu test tekniklerini kullanmasını gerektirir.",
+          "Spesifikasyon, bir araç tarafından işlenebilen resmi bir dilde yazılmıştır.",
+          "Test uzmanları çevik bir ekibin üyeleridir ve iyi programlama becerilerine sahiptir.",
+          "Test uzmanları iş alanında deneyimlidir ve iyi analitik becerilere sahiptir."
+        ],
+        correct: [0, 4], lo: "FL-4.4.2", k: "K2", multi: true
+      },
+      {
+        q: "Aşağıdakilerden hangisi checklist'e (kontrol listesi) dayalı testlerde kullanılan checklist'in bir unsuruna EN UYGUNDUR?",
+        options: [
+          "\"Geliştirici kodu uygularken bir hata(error) yaptı\"",
+          "\"Elde edilen komut kapsamı %85'i aşıyor\"",
+          "\"Program fonksiyonel ve fonksiyonel olmayan gereksinimler açısından doğru çalışıyor\"",
+          "\"Hata mesajları kullanıcının anlayabileceği bir dilde yazılmıştır\""
+        ],
+        correct: [3], lo: "FL-4.4.3", k: "K2"
+      },
+      {
+        q: "Bir online mağaza sahibinin bakış açısından yazılmış bir kullanıcı hikayesi için aşağıdaki kabul kriterlerini göz önünde bulundurduğunuzda;\n\nKullanıcının oturum açtığı ve ana sayfada olduğu varsayıldığında, Kullanıcı \"Ürün Ekle\" butonuna tıkladığında, \"Ürün Oluştur\" formu görünmeli ve kullanıcı yeni ürün için bir ad ve fiyat girebilmelidir.\n\nBahsedilen kabul kriteri hangi formatta yazılmıştır?",
+        options: [
+          "Kural odaklı",
+          "Senaryo odaklı",
+          "Ürün odaklı",
+          "Süreç odaklı"
+        ],
+        correct: [1], lo: "FL-4.5.2", k: "K2"
+      },
+      {
+        q: "Ekibinizin kabul kriterlerini tanımlamak için aşağıdaki kullanıcı hikayesini analiz ettiğini varsayın:\n\nKayıtlı bir müşteri olarak, satın alımlarımı takip edebilmek için şirketin web sitesinde önceki siparişlerimi görüntüleyebilmek istiyorum.\n\nAşağıdaki test senaryolarından hangisi bu kullanıcı hikayesiyle ilgili OLMAYACAKTIR?",
+        options: [
+          "Girdi: müşteri web sitesindeki hesabına giriş yapar ve \"sipariş geçmişini gör\" butonuna tıklar. Beklenen çıktı: sistem, tarih, sipariş numarası ve toplam maliyet dahil olmak üzere müşterinin önceki tüm siparişlerinin bir listesini gösterir.",
+          "Girdi: müşteri sipariş listesinden bir siparişe tıklar. Beklenen çıktı: sistem satın alınan ürünleri fiyatları ve miktarlarıyla birlikte tek tek görüntüler.",
+          "Girdi: müşteri sipariş geçmişi ekranında \"Artan şekilde sırala\" butonuna tıklar. Beklenen çıktı: sistem sipariş geçmişini sipariş numarasına göre artan sırada sıralanmış olarak gösterir.",
+          "Girdi: kayıtlı olmayan bir müşteri, müşteri veri tabanında önceden bulunmayan geçerli bir e-posta adresiyle yeni bir müşteri olarak kaydolur. Beklenen çıktı: sistem kaydı kabul eder ve hesabı oluşturur."
+        ],
+        correct: [3], lo: "FL-4.5.3", k: "K3"
+      },
+      {
+        q: "Ekibinizin, DevOps teslimat hattını kullanan süreci takip ettiğini varsayın. Bu sürecin ilk üç adımı şunlardır:\n(1) Kod geliştirme\n(2) Kodu bir sürüm kontrol sistemine gönderme ve \"test\" dalıyla birleştirme\n(3) Gönderilen kod için bileşen testi gerçekleştirme\n\nAşağıdakilerden hangisi bu teslimat hattının (2) numaralı adımı için giriş kriteri olarak EN UYGUNDUR?",
+        options: [
+          "Statik analiz, gönderilen kod için yüksek önem derecesine sahip uyarılar vermez.",
+          "Sistem sürüm kontrolü, kodu \"test\" dalıyla birleştirirken çakışma olduğunu bildirmez.",
+          "Bileşen testleri derlenir ve koşulmaya hazırlanır.",
+          "Komut kapsamı en az %80'dir."
+        ],
+        correct: [0], lo: "FL-5.1.3", k: "K2"
+      },
+      {
+        q: "Yeni bir proje için oranlara dayalı tahmin kullanarak test eforunu tahmin ettiğinizi varsayın.\n\nProje | Geliştirme eforu ($) | Test eforu ($)\nP1    | 800,000              | 40,000\nP2    | 1,200,000            | 130,000\nP3    | 600,000              | 70,000\nP4    | 1,000,000            | 120,000\n\nYeni proje için tahmini geliştirme eforu 800.000 $ ise, bu projedeki test çalışmaları için efor tahmininiz aşağıdakilerden hangisidir?",
+        options: ["$40,000", "$80,000", "$81,250", "$82,500"],
+        correct: [1], lo: "FL-5.1.4", k: "K3"
+      },
+      {
+        q: "Kullanıcıların ürün ARAmasına, ürün ayrıntılarını GÖRÜNTÜLEmesine, ürünleri bir alışveriş sepetine EKLEmesine ve SİPARİŞ VERMEsine olanak tanıyan bir web uygulamasını test ettiğinizi varsayın.\n\n      Test                                        Öncelik\nTC1  A ürününü ARA                                4\nTC2  B ürününü ARA                                4\nTC3  Ürün A ayrıntılarını GÖRÜNTÜLE               3\nTC4  Ürün B ayrıntılarını GÖRÜNTÜLE               2\nTC5  A ürününü alışveriş sepetine EKLE            3\nTC6  B ürününü alışveriş sepetine EKLE            1\nTC7  SİPARİŞ VER                                  5\n\nMantıksal bağlılıklar:\n• GÖRÜNTÜLE fonksiyonu test edilmeden önce ARA fonksiyonu test edilmelidir.\n• GÖRÜNTÜLE fonksiyonu EKLE fonksiyonundan önce test edilmelidir.\n• EKLE fonksiyonu SİPARİŞ fonksiyonundan önce test edilmelidir.\n\nBu durumda, dördüncü olarak hangi test senaryosu koşulmalıdır?",
+        options: ["TC3", "TC1", "TC7", "TC2"],
+        correct: [1], lo: "FL-5.1.5", k: "K3"
+      },
+      {
+        q: "Test çeyrekleri modeline göre, aşağıdakilerden hangisi Q1 (\"teknolojiye dönük\" ve \"ekibi destekleme\") çeyreğine girer?",
+        options: [
+          "Kullanılabilirlik testi",
+          "Fonksiyonel test",
+          "Kullanıcı kabul testi",
+          "Bileşen entegrasyon testi"
+        ],
+        correct: [3], lo: "FL-5.1.7", k: "K2"
+      },
+      {
+        q: "Aşağıdaki riskler hangi azaltma faaliyetleriyle EN İYİ şekilde eşleştirilir?\n\n1. Etkin olmayan döngü uygulamasının uzun sistem yanıtlarına neden olması\n2. Tüketicilerin tercihlerini değiştirmesi\n3. Sunucu odasını su basması\n4. Belirli bir yaşın üzerindeki hastaların hatalı raporlar alması\n\nA. Risk kabulü\nB. Performans testi\nC. Test tekniği olarak sınır değer analizinin kullanılması\nD. Risk transferi",
+        options: [
+          "1C, 2D, 3A, 4B",
+          "1B, 2D, 3A, 4C",
+          "1B, 2A, 3D, 4C",
+          "1C, 2A, 3D, 4B"
+        ],
+        correct: [2], lo: "FL-5.2.4", k: "K2"
+      },
+      {
+        q: "Aşağıdakilerden hangisi bir ürün kalite metriğidir?",
+        options: [
+          "Ortalama hata süresi",
+          "Bulunan hata sayısı",
+          "Gereksinim kapsamı",
+          "Hata tespit yüzdesi"
+        ],
+        correct: [0], lo: "FL-5.3.1", k: "K1"
+      },
+      {
+        q: "Kuzey Amerika'da bulunan bir test ekibinin üyesi olduğunuzu ve Avrupa'da bulunan bir müşteri için bir ürün geliştirdiğinizi varsayın. Ekip çeviktir, DevOps yaklaşımını takip eder ve sürekli entegrasyon / sürekli teslimat veri hattı kullanır.\n\nAşağıdakilerden hangisi test ilerlemesini müşteriye bildirmenin EN ETKİSİZ yoludur?",
+        options: ["Yüz yüze", "Gösterge Tabloları", "E-posta", "Video konferans"],
+        correct: [0], lo: "FL-5.3.3", k: "K2"
+      },
+      {
+        q: "Aşağıdakilerden hangisi yapılandırma yönetiminin (configuration management - CM) testleri nasıl desteklediğine dair EN İYİ örnektir?",
+        options: [
+          "Ortamın sürüm numarasına sahip olan yapılandırma yönetimi aracı, bu ortamda kullanılan kütüphanelerin, taslakların ve sürücülerin sürüm numaralarını alabilir.",
+          "Test girdilerinin değerlerinin bir kaydına sahip olan yapılandırma yönetimi aracı, bu yapılandırmalar için test senaryolarını yürütebilir ve test kapsamını hesaplayabilir.",
+          "Bir yazılım lisansının satın alındığı tarihle ilgili verilere sahip olan yapılandırma yönetimi aracı, ürün lisansının sona ermekte olduğu hakkında otomatik olarak bilgi üretir.",
+          "Test senaryosunun sürüm numarasına sahip olan yapılandırma yönetimi aracı, bu test senaryosu için otomatik olarak test verileri oluşturabilir."
+        ],
+        correct: [0], lo: "FL-5.4.1", k: "K2"
+      },
+      {
+        q: "Girdi olarak bir dizi sayı alan ve aynı sayı kümesini artan sırada sıralanmış olarak döndüren bir sıralama işlevini test ettiğinizi varsayın. Test koşum günlüğü aşağıdaki gibi görünmektedir.\n\nTC1: Input: 3.              Output: 3.               Result: passed\nTC2: Input: 3 11 6 5.       Output: 3 5 6 11.        Result: passed\nTC3: Input: 8 7 3 7 1.      Output: 1 3 7 8.         Result: failed\nTC4: Input: -2 -2 -2 -3 -3. Output: -3 -2.           Result: failed\nTC5: Input: 0 -2 0 3 4 4.   Output: -2 0 3 4.        Result: failed\n\nAşağıdakilerden hangisi bir hata raporunda kullanılabilecek EN İYİ hata tanımını sağlar?",
+        options: [
+          "Sistem birkaç sayı kümesini sıralayamıyor. Referans: TC3, TC4, TC5.",
+          "Sistem sıralama yaparken kopyaları göz ardı ediyor gibi görünüyor. Referans: TC3, TC4, TC5.",
+          "Sistem negatif sayıları sıralayamıyor. Referans: TC4, TC5.",
+          "TC3, TC4 ve TC5'te hatalar (yinelenen giriş verileri) vardır ve düzeltilmelidir."
+        ],
+        correct: [1], lo: "FL-5.5.1", k: "K3"
+      },
+      {
+        q: "Aşağıdaki açıklamalar hangi test aracı kategorileri ile EN İYİ eşleşir?\n\n1. İş akışı takibinin desteklenmesi\n2. İletişimin kolaylaştırılması\n3. Sanal makineler\n4. Destek gözden geçirmeleri\n\nA. Statik test araçları\nB. Ölçeklenebilirliği ve dağıtım standardizasyonunu destekleyen araçlar\nC. DevOps araçları\nD. İş birliği araçları",
+        options: [
+          "1A, 2B, 3C, 4D",
+          "1B, 2D, 3C, 4A",
+          "1C, 2D, 3B, 4A",
+          "1D, 2C, 3A, 4B"
+        ],
+        correct: [2], lo: "FL-6.1.1", k: "K2"
+      },
+      {
+        q: "Aşağıdakilerden hangisinin test otomasyonunun yararlarından biridir?",
+        options: [
+          "Oluşturması insanlar için çok karmaşık olan kapsam ölçütleri sağlar.",
+          "Test sorumluluğunu araç tedarikçisi ile paylaşır.",
+          "Test sonuçlarını analiz ederken eleştirel düşünme ihtiyacını ortadan kaldırır.",
+          "Program kodunun analizinden test senaryoları oluşturur."
+        ],
+        correct: [0], lo: "FL-6.2.1", k: "K1"
+      }
+    ]
+  },
+  C: {
+    title: "Örnek Sınav Set C",
+    questions: [
+      {
+        q: "Aşağıdakilerden hangisi tipik bir test hedefi olabilir?",
+        options: [
+          "Dokümante edilmiş gereksinimlerin karşılandığını doğrulamak.",
+          "Arızalara (failure) neden olmak ve hataları (defect) bulmak.",
+          "Hataları başlatmak ve kök nedenleri belirlemek.",
+          "Test nesnesinin (test edilen ürünün) kullanıcı beklentilerini karşıladığını doğrulamak."
+        ],
+        correct: [1], lo: "FL-1.1.1", k: "K1"
+      },
+      {
+        q: "Aşağıdaki ifadelerden hangisi test etme ve hata ayıklama arasındaki farkı EN İYİ şekilde açıklamaktadır?",
+        options: [
+          "Test etme arızalara neden olurken, hata ayıklama arızaları düzeltir.",
+          "Test etme olumsuz bir etkinliktir, hata ayıklama olumlu bir etkinliktir.",
+          "Test etme, hataların var olduğunu belirlerken, hata ayıklama hataları ortadan kaldırır.",
+          "Test etme hataların nedenini bulur, hata ayıklama ise bu nedenleri düzeltir."
+        ],
+        correct: [2], lo: "FL-1.1.2", k: "K2"
+      },
+      {
+        q: "\"'Yeni hata bulamıyoruz başarılı bir yazılım elde ettik düşüncesi bir yanılgıdır\" test prensiplerinden biridir.\n\nAşağıdakilerden hangisi, bu prensibin pratikte uygulanmasına bir örnektir?",
+        options: [
+          "Testlerin, hata olmadığını gösteremeyeceğini açıklamak.",
+          "Son kullanıcıları kabul testlerini gerçekleştirmeleri için desteklemek.",
+          "Teslim edilen sistemde hiçbir uygulama hatasının kalmadığından emin olmak.",
+          "Hiç arızaya neden olmayan testleri, daha az hata kaldığını varsayacak şekilde değiştirmek."
+        ],
+        correct: [1], lo: "FL-1.3.1", k: "K2"
+      },
+      {
+        q: "Aşağıdaki test faaliyetlerinden hangisi sınır değeri analizi ve denklik paylarına ayırma tekniklerinin uygulanmasını EN ÇOK içerir? (2 seçenek seçin)",
+        options: [
+          "Test uygulaması",
+          "Test tasarımı",
+          "Test yürütme",
+          "Test gözetimi",
+          "Test analizi"
+        ],
+        correct: [1, 4], lo: "FL-1.4.1", k: "K2", multi: true
+      },
+      {
+        q: "Aşağıda verilen test çalışma ürünleri, verilen hangi test aktiviteleri ile EN İYİ şekilde eşleşmektedir?\n\n1. Kapsam öğeleri\n2. Değişiklik istekleri\n3. Test yürütme çizelgesi\n4. Önceliklendirilmiş test koşulları\n\nA. Test analizi\nB. Test tasarımı\nC. Test uygulaması\nD. Test tamamlama",
+        options: [
+          "1B, 2D, 3C, 4A",
+          "1B, 2D, 3A, 4C",
+          "1D, 2C, 3A, 4B",
+          "1D, 2C, 3B, 4A"
+        ],
+        correct: [0], lo: "FL-1.4.3", k: "K2"
+      },
+      {
+        q: "Aşağıda test rolleri hakkında verilen ifadelerden EN DOĞRU olan hangisidir?",
+        options: [
+          "Çevik yazılım geliştirmede, test yönetimi ekibin sorumluluğundadır, test etme rolü ise ekibin dışından tek bir kişinin sorumluluğundadır.",
+          "Test etme rolü öncelikli olarak test izleme ve test kontrolünden sorumluyken, test yönetimi rolü öncelikli olarak test planlama ve test tamamlama faaliyetlerinden sorumludur.",
+          "Çevik yazılım geliştirmede, birden fazla ekibi kapsayan test yönetimi faaliyetleri ekibin dışındaki bir test yöneticisi tarafından yürütülürken, bazı test yönetimi görevleri ekibin kendisi tarafından yürütülür.",
+          "Test yönetimi rolü öncelikli olarak test analizi ve test tasarımından, test etme rolü ise öncelikli olarak test uygulaması ve test yürütmesinden sorumludur."
+        ],
+        correct: [2], lo: "FL-1.4.5", k: "K2"
+      },
+      {
+        q: "Aşağıdakilerden hangisi tüm ekip yaklaşımının bir avantajlarından biridir?",
+        options: [
+          "Test uzmanı bulunmayan ekipler",
+          "Gelişmiş ekip dinamikleri",
+          "Uzmanlaşmış ekip üyeleri",
+          "Daha büyük ekipler"
+        ],
+        correct: [1], lo: "FL-1.5.2", k: "K1"
+      },
+      {
+        q: "Aşağıda testlerin bağımsızlığı ile ilgili verilen ifadelerden hangisi DOĞRUdur?",
+        options: [
+          "Bağımsız test uzmanları, geliştiricilerden farklı teknik bakış açıları nedeniyle hataları bulurlar, ancak bağımsızlıkları geliştiricilerle düşmanca bir ilişkiye yol açabilir.",
+          "Geliştiricilerin kendi kodlarına aşina olmaları, kodda birkaç hata bulmaları anlamına gelir, ancak test uzmanlarıyla ortak yazılım geçmişleri, bu hataların test uzmanları tarafından da bulunacağı anlamına gelir.",
+          "Bağımsız testler, geliştirici ekibinin dışında ve ideal olarak kuruluşun dışından test uzmanları gerektirir, ancak bu test uzmanları uygulama alanını anlamakta zorluk çekerler.",
+          "Geliştirici ekibinin dışından gelen test uzmanları, ekip içinden gelen test uzmanlarından daha bağımsızdır, ancak ekip içinden gelen test uzmanlarının, ürünün piyasaya sürülmesindeki gecikmelerden daha fazla sorumlu tutulma olasılığı daha yüksektir."
+        ],
+        correct: [0], lo: "FL-1.5.3", k: "K2"
+      },
+      {
+        q: "Aşağıdakilerden hangisi tüm yazılım geliştirme yaşam döngülerine uygulanabilecek iyi bir test uygulaması için doğrudur?",
+        options: [
+          "Her test seviyesi için karşılık gelen bir geliştirme seviyesi vardır.",
+          "Her test hedefi için karşılık gelen bir geliştirme hedefi vardır.",
+          "Her test faaliyeti için karşılık gelen bir kullanıcı faaliyeti vardır.",
+          "Her geliştirme faaliyeti için karşılık gelen bir test faaliyeti vardır."
+        ],
+        correct: [3], lo: "FL-2.1.2", k: "K1"
+      },
+      {
+        q: "Aşağıdakilerden hangisi, yazılım geliştirmeye yönelik önce-test-et (test-first approach) yaklaşımının bir örneğidir?",
+        options: [
+          "Bileşen Test Güdümlü Geliştirme",
+          "Entegrasyon Test Güdümlü Geliştirme",
+          "Sistem Test Güdümlü Geliştirme",
+          "Kabul Test Güdümlü Geliştirme"
+        ],
+        correct: [3], lo: "FL-2.1.3", k: "K1"
+      },
+      {
+        q: "Aşağıdakilerden hangisi \"shift-left\" kavramını EN İYİ şekilde açıklar?",
+        options: [
+          "Geliştiriciler tarafından kabul edildiğinde, test sürecinin sol tarafındaki manuel faaliyetler, \"erken test, zaman ve para tasarrufu sağlar\" ilkesini desteklemek için otomatize edilir.",
+          "Maliyet açısından uygun olduğunda, test faaliyetleri yazılım geliştirme yaşam döngüsünün (SDLC) daha erken aşamalarına taşınır, böylece SDLC'nin ilerleyen aşamalarında bulunan kusurların sayısı azaltılarak toplam kalite maliyeti düşürülür.",
+          "Test uzmanları, boş zamanlarında, bileşen testleri ve bileşen entegrasyon testlerinden başlayarak regresyon testi için testleri otomatize etmekle yükümlüdür.",
+          "Mümkün olduğunda, test uzmanları SDLC'nin erken aşamalarında görevleri yerine getirmek üzere eğitilir ve böylece SDLC'nin ilerleyen aşamalarında daha fazla test faaliyeti otomatize edilebilir."
+        ],
+        correct: [1], lo: "FL-2.1.5", k: "K2"
+      },
+      {
+        q: "Aşağıdakilerden hangisinin, geriye dönük bir inceleme sonucunda ortaya çıkma olasılığı EN AZDIR?",
+        options: [
+          "Geliştirme uygulamalarındaki iyileştirmelerin belirlenmesi ile gelecekteki test nesnelerinin kalitesinin artması.",
+          "Otomasyon yoluyla test ortamlarının yapılandırılmasının hızlandırılması ile test verimliliğinin artması.",
+          "Son kullanıcıların geliştirme ve test süreçlerine ilişkin anlayışlarının artması.",
+          "Geliştiricilerden gelen geri bildirimler yoluyla otomatik test komut dosyalarının iyileştirilmesi."
+        ],
+        correct: [2], lo: "FL-2.1.6", k: "K2"
+      },
+      {
+        q: "Testler doğrulamaya odaklanmışsa ve test uzmanları tarafından gerçekleştirilmiyorsa, aşağıdaki test seviyelerinden hangisinin gerçekleştirilme olasılığı EN YÜKSEKTİR?",
+        options: [
+          "Bileşen testi",
+          "Bileşen entegrasyon testi",
+          "Sistem entegrasyon testi",
+          "Kabul testi"
+        ],
+        correct: [3], lo: "FL-2.2.1", k: "K2"
+      },
+      {
+        q: "Navigasyon sistemi yazılımı, tek yönlü caddelerde ters yönde sürüş gibi trafik kurallarını ihlal eden rotalar önerdiği için güncellenmiştir. Aşağıdakilerden hangisi yapılacak testi EN İYİ şekilde tanımlamaktadır?",
+        options: [
+          "Yalnızca onaylama testi",
+          "Onaylama testi ve ardından regresyon testi",
+          "Yalnızca regresyon testi",
+          "Regresyon testi ve ardından onaylama testi"
+        ],
+        correct: [1], lo: "FL-2.2.3", k: "K2"
+      },
+      {
+        q: "Aşağıdaki örnek hatalar göz önüne alındığında:\n\ni. Tasarım spesifikasyonunun iki farklı kısmı, tasarımın karmaşıklığı nedeniyle uyuşmamaktadır.\nii. Yanıt süresinin çok uzun olması kullanıcıların sabrını yitirmesine neden olmaktadır.\niii. Yürütme sırasında koddaki bir yola ulaşılamamaktadır.\niv. Bir değişken tanımlanmıştır ancak programda daha sonra hiç kullanılmamıştır.\nv. Programın bir rapor oluşturmak için ihtiyaç duyduğu bellek miktarı çok fazladır.\n\nAşağıdakilerden hangisi statik testlerle (dinamik testler yerine) bulunabilecek örnek hataları EN İYİ şekilde tanımlamaktadır?",
+        options: ["ii, v", "iii, v", "i, ii, iv", "i, iii, iv"],
+        correct: [3], lo: "FL-3.1.3", k: "K2"
+      },
+      {
+        q: "Aşağıdakilerden hangisi, paydaşların erken ve sık sık geri bildirim vermesinin bir avantajıdır?",
+        options: [
+          "Gereksinimlerdeki değişiklikler daha erken anlaşılır ve uygulanır.",
+          "İş paydaşlarının kullanıcı gereksinimlerini anlamasını sağlar.",
+          "Ürün sahiplerinin gereksinimlerini istedikleri sıklıkta değiştirmelerine olanak tanır.",
+          "Son kullanıcılara, sürüm yayınlanmadan önce hangi gereksinimlerin uygulanmayacağı bildirilir."
+        ],
+        correct: [0], lo: "FL-3.2.1", k: "K1"
+      },
+      {
+        q: "Aşağıda verilen inceleme türleri hangi açıklamalarla EN İYİ şekilde eşleşir?\n\n1. Teknik gözden geçirme\n2. Gayri resmi gözden geçirme\n3. Teftiş (Inspection)\n4. Üzerinden geçme (Walkthrough)\n\nA. Fikir birliğine varmak, yeni fikirler üretmek ve yazarları iyileştirmeye motive etmek gibi hedefleri içerir.\nB. Gözden geçiricileri eğitmek, fikir birliğine varmak, yeni fikirler üretmek ve potansiyel hataları tespit etmek gibi hedefleri içerir.\nC. Ana hedef, potansiyel hataları tespit etmektir ve süreç iyileştirmeyi desteklemek için metriklerin toplanmasını gerektirir.\nD. Ana hedef, potansiyel hataları tespit etmektir ve resmi olarak dokümante edilmiş bir çıktı üretmez.",
+        options: [
+          "1A, 2B, 3C, 4D",
+          "1A, 2D, 3C, 4B",
+          "1B, 2C, 3D, 4A",
+          "1C, 2D, 3A, 4B"
+        ],
+        correct: [1], lo: "FL-3.2.4", k: "K2"
+      },
+      {
+        q: "Aşağıdakilerden hangisi başarılı bir gözden geçirmeye katkıda bulunan faktörlerden biridir?",
+        options: [
+          "Yönetimin gözden geçirici olarak katılımını sağlamak.",
+          "Büyük çalışma ürünlerini daha küçük parçalara ayırmak.",
+          "Gözden geçirici değerlendirmesini bir hedef olarak belirlemek.",
+          "Her gözden geçirme, bir belgeyi kapsayacak şekilde planlamak."
+        ],
+        correct: [1], lo: "FL-3.2.5", k: "K1"
+      },
+      {
+        q: "Kara kutu test teknikleri ile tecrübeye dayalı test teknikleri arasındaki TEMEL fark nedir?",
+        options: [
+          "Test nesnesi",
+          "Test tekniğinin kullanıldığı test seviyesi",
+          "Test esası (Test basis)",
+          "Test tekniğinin kullanılabileceği yazılım geliştirme yaşam döngüsü (SDLC)"
+        ],
+        correct: [2], lo: "FL-4.1.1", k: "K2"
+      },
+      {
+        q: "Geçerli PIN'leri kabul eden ve geçersiz PIN'leri reddeden bir PIN doğrulayıcıyı test ettiğinizi varsayın. PIN, bir rakam dizisidir ve aynı rakamdan oluşmayan dört rakamdan oluşuyorsa geçerlidir.\n\nAşağıdaki geçerli denklik paylarını belirlediniz:\nDeğişken: PIN kodu uzunluğu\n• \"Uzunluk doğru\" payı - dört haneli PIN kodları\n• \"Uzunluk yanlış\" payı - 4 karakterden farklı uzunlukta PIN'ler\n\nDeğişken: Farklı rakam sayısı\n• \"Doğru farklı rakam sayısı\" payı - En az iki farklı rakamdan oluşan PIN'ler\n• \"Yanlış olan farklı rakamların sayısı\" payı - Tüm rakamları aynı olan PIN'ler\n\nAşağıdakilerden hangisi, belirlenen denklik paylarını kapsayan EN İYİ test verisi girdi grubudur?",
+        options: [
+          "12, 1111, 1234, 12345",
+          "1, 123, 1111, 1234",
+          "11, 12, 1111, 12345",
+          "123, 1222, 12345"
+        ],
+        correct: [0], lo: "FL-4.2.1", k: "K3"
+      },
+      {
+        q: "Bir geliştiriciden aşağıdaki iş kuralını uygulaması istendiğini varsayın:\n\nGİRİŞ: değer (tamsayı)\nEĞER (değer ≤ 100 VEYA değer ≥ 200) İSE \"değer yanlış\" yaz\nDEĞİLSE \"değer TAMAM\" yaz\n\nTest senaryolarını 2 değerli sınır değer analizi kullanarak tasarladınız.\n\nAşağıdaki test girdileri gruplarından hangisi EN GENİŞ kapsamı sağlar?",
+        options: [
+          "100, 150, 200, 201",
+          "99, 100, 200, 201",
+          "98, 99, 100, 101",
+          "101, 150, 199, 200"
+        ],
+        correct: [3], lo: "FL-4.2.2", k: "K3"
+      },
+      {
+        q: "Sürücü belgesi sınav sonuçlarını analiz etmek için sistem geliştiren bir proje üzerinde çalıştığınızı varsayın.\n\n                                   R1  R2  R3\nC1: Sınava ilk kez mi giriyorsunuz? -   -   Y\nC2: Teorik sınavı geçtiniz mi?     D   Y   -\nC3: Pratik sınavı geçtiniz mi?     D   -   Y\n\nEhliyet verilecek                   X\nEk sürüş dersleri talep edildi                 X\nSınava tekrar girmek için başvuru yapıldı   X\n\n(D: Doğru, Y: Yanlış)\n\nKarar tablosunda çelişkili kurallar olduğunu gösteren test verileri nelerdir?",
+        options: [
+          "C1 = D, C2 = D, C3 = Y",
+          "C1 = D, C2 = Y, C3 = D",
+          "C1 = D, C2 = D, C3 = D ve C1 = Y, C2 = D, C3 = D",
+          "C1 = Y, C2 = Y, C3 = Y"
+        ],
+        correct: [3], lo: "FL-4.2.3", k: "K3"
+      },
+      {
+        q: "Aşağıdaki durum geçiş diyagramına göre test senaryoları tasarladığınızı varsayın:\n\nDurum geçişleri:\n• BAŞLA --Oda talebi--> TALEP\n• TALEP --Mevcut değil--> BEKLEME LİSTESİ\n• TALEP --Mevcut--> ONAYLANDI\n• BEKLEME LİSTESİ --Mevcut--> ONAYLANDI\n• BEKLEME LİSTESİ --İptal--> SON\n• ONAYLANDI --Ödeme--> SON\n\n%100 geçerli geçiş kapsamı elde etmek için gereken EN AZ test senaryosu sayısı aşağıdakilerden hangisidir?",
+        options: ["3", "2", "5", "6"],
+        correct: [0], lo: "FL-4.2.4", k: "K3"
+      },
+      {
+        q: "Aşağıdaki kontrol akış grafiği ile temsil edilen koda dal testi uygulamak istediğinizi varsayın. (Grafik; 1 başlangıç düğümü, ardından bir karar noktası, bir döngü ve birleşen iki yol içermektedir; toplam 8 dal bulunmaktadır)\n\nKaç tane kapsam öğesini test etmeniz gerekmektedir?",
+        options: ["2", "4", "8", "7"],
+        correct: [2], lo: "FL-4.3.2", k: "K2"
+      },
+      {
+        q: "Beyaz kutu testi, kara kutu testini desteklemeye nasıl yardımcı olabilir?",
+        options: [
+          "Beyaz kutu kapsam ölçümleri, test uzmanlarının bu kara kutu testlerinin elde ettiği kod kapsamı açısından kara kutu testlerini değerlendirmelerine yardımcı olabilir.",
+          "Beyaz kutu kapsam analizi, test uzmanlarının kaynak kodun ulaşılamayan parçalarını belirlemelerine yardımcı olabilir.",
+          "Dal testi, kara kutu test tekniklerini de kapsar, bu nedenle tam dal kapsamı elde etmek, herhangi bir kara kutu tekniğinin tam kapsamını elde etmeyi garanti eder.",
+          "Beyaz kutu test teknikleri, kara kutu teknikleri için kapsam öğeleri sağlayabilir."
+        ],
+        correct: [0], lo: "FL-4.3.3", k: "K2"
+      },
+      {
+        q: "Aşağıda verilen listeyi kullanan bir test uzmanı, EN MUHTEMEL olarak hangi test tekniğini kullanmaktadır?\n\n• Doğru girdi kabul edilmedi\n• Yanlış girdi kabul edildi\n• Yanlış çıktı biçimi\n• Sıfıra bölme",
+        options: [
+          "Keşif testi",
+          "Kusur ortaya çıkarmaya yönelik saldırı",
+          "Kontrol listesine dayalı test",
+          "Sınır değer analizi"
+        ],
+        correct: [1], lo: "FL-4.4.1", k: "K2"
+      },
+      {
+        q: "Aşağıdakilerden hangisi, kontrol listesine dayalı testlerin nasıl daha geniş kapsamlı sonuçlar verebileceğini EN İYİ şekilde açıklamaktadır?",
+        options: [
+          "Kontrol listesi öğeleri yeterince düşük bir ayrıntı düzeyinde tanımlanabilir, böylece test uzmanı bu öğelere dayalı olarak ayrıntılı test senaryoları uygulayabilir ve yürütebilir.",
+          "Kontrol listeleri otomatize edilebilir, böylece otomatize test yürütme kontrol listesi öğelerini her kapsadığında ek kapsama elde edilir.",
+          "Her bir kontrol listesi öğesi ayrı ve bağımsız olarak test edilmelidir, böylece öğeler yazılımın farklı alanlarını kapsar.",
+          "Aynı üst düzey kontrol listesi öğelerine dayalı testler tasarlayan ve uygulayan iki test uzmanı, genellikle testleri biraz farklı şekillerde gerçekleştirir."
+        ],
+        correct: [3], lo: "FL-4.4.3", k: "K2"
+      },
+      {
+        q: "Aşağıdakilerden hangisi senaryo odaklı kabul kriterinin EN İYİ örneğini sunmaktadır?",
+        options: [
+          "Uygulama, kullanıcıların talep üzerine hesaplarını ve ilgili tüm verileri silmelerine izin vermelidir.",
+          "Bir müşteri sepetine bir ürün ekleyip ödeme işlemine geçtiğinde, henüz yapmamışsa oturum açması veya bir hesap oluşturması istenmelidir.",
+          "EĞER (ürün(23).Ad, sepet.ürünler())) İSE YANLIŞ'a döndür",
+          "Web sitesi, ICT Erişilebilirlik 508 Standartlarına uymalı ve tüm içeriğin engelli kullanıcılar tarafından erişilebilir olmasını sağlamalıdır."
+        ],
+        correct: [1], lo: "FL-4.5.2", k: "K2"
+      },
+      {
+        q: "Kabul testi güdümlü yazılım geliştirme kullandığınızı ve aşağıdaki kullanıcı hikayesine dayalı test senaryoları tasarladığınızı varsayın:\n\nNormal veya Özel kullanıcı olarak, belirli katlara erişmek için elektronik kat kartımı kullanabilmek istiyorum.\n\nKabul Kriterleri:\nAC1: Normal kullanıcılar 1. ve 3. katlara erişebilirler.\nAC2: 4. kat sadece Özel kullanıcılar tarafından erişilebilir.\nAC3: Özel kullanıcılar, Normal kullanıcıların tüm erişim haklarına sahiptir.\n\nAC3'ü test etmek için EN uygun test senaryosu aşağıdakilerden hangisidir?",
+        options: [
+          "Normal bir kullanıcının 1. ve 3. katlara erişebildiğini kontrol edin.",
+          "Normal kullanıcıların 4. kata erişemediğini kontrol edin.",
+          "Özel kullanıcının 5. kata erişebildiğini kontrol edin.",
+          "Özel kullanıcının 1, 2 ve 3. katlara erişebildiğini kontrol edin."
+        ],
+        correct: [3], lo: "FL-4.5.3", k: "K3"
+      },
+      {
+        q: "Aşağıdakilerden hangisi test planının amacı DEĞİLDİR?",
+        options: [
+          "Bileşen testleri ve bileşen entegrasyon testleri için test verilerini ve beklenen sonuçları tanımlamak.",
+          "Bileşen test seviyesinden çıkış kriteri olarak \"%100 ifade kapsamı ve %100 dal kapsamı elde edilmelidir\" tanımını yapmak.",
+          "Test ilerleme raporunun hangi alanları içermesi gerektiğini ve bu raporun nasıl bir formda olması gerektiğini açıklamak.",
+          "Test stratejisi bu test seviyesini gerektirmesine rağmen, sistem entegrasyon testinin testten neden hariç tutulacağını açıklamak için."
+        ],
+        correct: [0], lo: "FL-5.1.1", k: "K2"
+      },
+      {
+        q: "Her döngünün başında ekibin, döngü sırasında tamamlamaları gereken iş miktarını (adam-gün cinsinden) tahminlediğini varsayın. E(n), n. döngü için tahmin edilen iş miktarı, A(n) ise n. döngüde yapılan gerçek iş miktarı olsun. Üçüncü döngüden itibaren ekip, dış değerlemeye (ekstrapolasyon) dayalı aşağıdaki tahmin modelini kullanır:\n\nE(n) = (3 * A(n-1) + A(n-2)) / 4\n\nİlk dört döngü için veriler:\nDöngü #1: Tahmini=8, Gerçek=7\nDöngü #2: Tahmini=7, Gerçek=12\nDöngü #3: Tahmini=11, Gerçek=8\nDöngü #4: Tahmini=9, Gerçek=6\n\n5. döngü için tahmini iş miktarı aşağıdakilerden hangisidir?",
+        options: [
+          "10,5 adam-gün",
+          "8,25 adam-gün",
+          "6,5 adam-gün",
+          "9,4 adam-gün"
+        ],
+        correct: [2], lo: "FL-5.1.4", k: "K3"
+      },
+      {
+        q: "TC 1 ile TC 7 arasındaki yedi test senaryosunu yürütmek için bir test yürütme programı hazırladığınızı varsayın. Test senaryolarının öncelikleri (1 = en yüksek öncelik, 3 = en düşük öncelik) ve bağımlılıkları:\n\n• TC 1 (öncelik: 2) → TC 2\n• TC 2 (öncelik: 3) → TC 5\n• TC 3 (öncelik: 2)\n• TC 4 (öncelik: 2) → TC 5, TC 7\n• TC 5 (öncelik: 1) → TC 6\n• TC 6 (öncelik: 3)\n• TC 7 (öncelik: 1)\n\n(Oklar: TC X → TC Y, TC Y'nin ancak TC X önceden yürütülmüşse yürütülebileceğini gösterir.)\n\n6. olarak yürütülecek test senaryosu aşağıdakilerden hangisi olmalıdır?",
+        options: ["TC 3", "TC 5", "TC 6", "TC 2"],
+        correct: [0], lo: "FL-5.1.5", k: "K3"
+      },
+      {
+        q: "Test piramidi modeli aşağıdakilerden hangisini gösterir?",
+        options: [
+          "Testlerin farklı öncelikleri olabileceğini",
+          "Testlerin farklı ayrıntı düzeylerine sahip olabileceğini",
+          "Testlerin farklı kapsam kriterleri gerektirebileceğini",
+          "Testlerin diğer testlere bağlı olabileceğini"
+        ],
+        correct: [1], lo: "FL-5.1.6", k: "K1"
+      },
+      {
+        q: "Test çeyrekleri, test seviyeleri ve test türleri arasındaki ilişki aşağıdakilerden hangisidir?",
+        options: [
+          "Test çeyrekleri, test seviyeleri ve test türlerinin belirli kombinasyonlarını temsil eder ve yazılım geliştirme yaşam döngüsündeki konumlarını tanımlar.",
+          "Test çeyrekleri, her test seviyesinde gerçekleştirilen bireysel test türlerinin ayrıntı düzeyini tanımlar.",
+          "Test çeyrekleri, gerçekleştirilebilecek test türlerini, test seviyelerine atar.",
+          "Test çeyrekleri, test seviyelerini ve test türlerini belirli paydaşları hedefleme gibi çeşitli kriterlere göre gruplandırır."
+        ],
+        correct: [3], lo: "FL-5.1.7", k: "K2"
+      },
+      {
+        q: "Aşağıdakilerden hangisi, ürün risk analizinin testlerin titizliğini ve kapsamını nasıl etkileyebileceğine dair bir örnektir?",
+        options: [
+          "Sürekli risk izleme, ortaya çıkan riskleri mümkün olan en kısa sürede tespit etmemizi sağlar.",
+          "Risk tanımlama, risk azaltma faaliyetlerini uygulamamıza ve risk seviyesini düşürmemize olanak tanır.",
+          "Değerlendirilen risk seviyesi, testlerin kesinliğini (rigor) seçmemize yardımcı olur.",
+          "Risk analizi, kapsam öğelerini türetmemizi sağlar."
+        ],
+        correct: [2], lo: "FL-5.2.3", k: "K2"
+      },
+      {
+        q: "Test sürecindeki aşağıdaki faaliyetlerden hangisi test ilerleme raporlarını EN ÇOK kullanır?",
+        options: [
+          "Test tasarımı",
+          "Testin tamamlanması",
+          "Test analizi",
+          "Test planlaması"
+        ],
+        correct: [1], lo: "FL-5.3.2", k: "K2"
+      },
+      {
+        q: "Aşağıdakilerden hangisi, yapılandırma yönetiminin testleri nasıl desteklediğine dair bir örnek DEĞİLDİR?",
+        options: [
+          "Depoya yapılan tüm işlemler benzersiz bir şekilde tanımlanır ve sürüm kontrolüne tabi tutulur.",
+          "Test ortamı öğelerindeki tüm değişiklikler izlenir.",
+          "Tüm gereksinim özellikleri test planlarında açıkça belirtilmiştir.",
+          "Tespit edilen tüm hatalara bir durum atanmıştır."
+        ],
+        correct: [3], lo: "FL-5.4.1", k: "K2"
+      },
+      {
+        q: "Web tabanlı bir alışveriş uygulaması için aşağıdaki hata raporunu göz önünden bulundurduğunuzda; bu hata raporunda eksik olan EN önemli bilgi nedir?\n\nUygulama: WebShop v0.99\nHata: Giriş düğmesi çalışmıyor\nYeniden oluşturma adımları:\n  Web sitesini başlatın\n  Giriş düğmesine tıklayın\nBeklenen sonuç: Kullanıcı giriş sayfasına yönlendirilmelidir.\nGerçek sonuç: Giriş düğmesi tıklandığında yanıt vermiyor.\nÖnem derecesi: Yüksek\nÖncelik: Acil",
+        options: [
+          "Test eden kişinin adı ve tarih",
+          "Test ortamı öğeleri ve sürüm numaraları",
+          "Test nesnesinin tanımlanması",
+          "Paydaşların çıkarları üzerindeki etkisi"
+        ],
+        correct: [1], lo: "FL-5.5.1", k: "K3"
+      },
+      {
+        q: "Aşağıdaki hangisi, test senaryolarının, tespit edilen hataların ve yapılandırma yönetiminin düzenlenmesine yardımcı olur?",
+        options: [
+          "Test yürütme ve kapsam araçları",
+          "Test tasarımı ve uygulama araçları",
+          "Hata yönetimi araçları",
+          "Test yönetimi araçları"
+        ],
+        correct: [3], lo: "FL-6.1.1", k: "K2"
+      },
+      {
+        q: "Aşağıdakilerden hangisi test otomasyonunun en olası faydasıdır?",
+        options: [
+          "Test esasına erişim olmadan test senaryoları oluşturma yeteneği",
+          "Daha objektif değerlendirme yoluyla kapsama alanının genişletilmesi",
+          "Daha yüksek işlem gücü ile mevcut test yürütme sürelerinde artış",
+          "Daha fazla tutarlılık ve tekrarlanabilirlik yoluyla insan hatalarının önlenmesi"
+        ],
+        correct: [3], lo: "FL-6.2.1", k: "K1"
+      }
+    ]
+  }
+};
+
+// ============= UYGULAMA DURUMU =============
+let state = {
+  view: 'home',       // 'home' | 'exam' | 'result'
+  currentExam: null,  // 'A' | 'B' | 'C'
+  currentQ: 0,
+  answers: {},        // { questionIndex: [selectedIndex,...] }
+  submitted: {}       // { questionIndex: true }  -- hangi sorular onaylandı
+};
+
+// ============= GÖRÜNÜMLER =============
+const app = document.getElementById('app');
+
+function render() {
+  if (state.view === 'home') renderHome();
+  else if (state.view === 'exam') renderExam();
+  else if (state.view === 'result') renderResult();
+  window.scrollTo(0, 0);
+}
+
+function renderHome() {
+  app.innerHTML = `
+    <h1>ISTQB Çıkmış Sorular</h1>
+    <div class="subtitle">Temel Seviye Sertifikalı Test Uzmanı - Syllabus v4.0</div>
+
+    <div class="card">
+      <h2 style="color:#1a4d7a; margin-bottom:8px;">Sınav Seç</h2>
+      <p style="color:#555; margin-bottom:4px;">Her set 40 sorudan oluşur. Geçme notu: 26/40 (%65)</p>
+      <div class="exam-select">
+        <button onclick="startExam('A')">Set A - 40 Soru</button>
+        <button onclick="startExam('B')">Set B - 40 Soru</button>
+        <button onclick="startExam('C')">Set C - 40 Soru</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3 style="color:#1a4d7a; margin-bottom:10px;">Nasıl Kullanılır?</h3>
+      <p style="color:#444;">
+        Her soruyu işaretle ve "Cevabı Göster" butonuna tıkla. Yanlışsa doğru cevabı göreceksin.
+        Soru listesinden dilediğin soruya geçebilir, sonunda sonuç özetini görebilirsin.
+      </p>
+      <p style="color:#444; margin-top:8px;">
+        <strong>Çoklu seçim</strong> işaretli sorularda birden fazla seçenek seçilir.
+      </p>
+    </div>
+  `;
+}
+
+function startExam(examKey) {
+  state.currentExam = examKey;
+  state.currentQ = 0;
+  state.answers = {};
+  state.submitted = {};
+  state.view = 'exam';
+  render();
+}
+
+function renderExam() {
+  const exam = examData[state.currentExam];
+  const q = exam.questions[state.currentQ];
+  const isMulti = q.multi === true;
+  const userAns = state.answers[state.currentQ] || [];
+  const isSubmitted = state.submitted[state.currentQ] === true;
+  const answeredCount = Object.keys(state.submitted).length;
+  const progress = (answeredCount / exam.questions.length) * 100;
+
+  // soru listesi ızgarası
+  let gridHtml = '';
+  for (let i = 0; i < exam.questions.length; i++) {
+    let cls = 'q-num';
+    if (i === state.currentQ) cls += ' current';
+    if (state.submitted[i]) {
+      const corr = state.answers[i] && arraysEqual(state.answers[i].slice().sort(), exam.questions[i].correct.slice().sort());
+      cls += corr ? ' correct' : ' incorrect';
+    } else if (state.answers[i]) cls += ' answered';
+    gridHtml += `<div class="${cls}" onclick="goToQ(${i})">${i+1}</div>`;
+  }
+
+  // seçenekler
+  let optsHtml = '';
+  q.options.forEach((opt, i) => {
+    let cls = 'option';
+    if (isSubmitted) {
+      const isCorrect = q.correct.includes(i);
+      const isChosen = userAns.includes(i);
+      if (isCorrect && isChosen) cls += ' correct';
+      else if (!isCorrect && isChosen) cls += ' incorrect';
+      else if (isCorrect && !isChosen) cls += ' correct-not-selected';
+    }
+    const checked = userAns.includes(i) ? 'checked' : '';
+    const disabled = isSubmitted ? 'disabled' : '';
+    const type = isMulti ? 'checkbox' : 'radio';
+    optsHtml += `
+      <div class="${cls}" onclick="${isSubmitted ? '' : `selectOption(${i})`}">
+        <input type="${type}" name="opt" ${checked} ${disabled}>
+        <label>${String.fromCharCode(97+i)}) ${escapeHtml(opt)}</label>
+      </div>
+    `;
+  });
+
+  // geribildirim
+  let feedback = '';
+  if (isSubmitted) {
+    const isCorrect = arraysEqual(userAns.slice().sort(), q.correct.slice().sort());
+    const correctLetters = q.correct.map(i => String.fromCharCode(97+i)).join(', ');
+    if (isCorrect) {
+      feedback = `<div class="feedback correct"><strong>✓ Doğru!</strong> Doğru cevap: ${correctLetters}</div>`;
+    } else {
+      feedback = `<div class="feedback incorrect"><strong>✗ Yanlış.</strong> Doğru cevap: <strong>${correctLetters}</strong></div>`;
+    }
+  }
+
+  app.innerHTML = `
+    <h1>${exam.title}</h1>
+    <div class="subtitle">Soru ${state.currentQ + 1} / ${exam.questions.length} · Öğrenme Hedefi: ${q.lo} · ${q.k}</div>
+
+    <div class="progress-bar"><div class="progress-fill" style="width:${progress}%"></div></div>
+
+    <div class="card">
+      <div class="question-header">
+        <span><strong>Soru ${state.currentQ + 1}</strong></span>
+        <span>1 puan</span>
+      </div>
+      ${isMulti ? '<div class="multi-select-hint">⚠ Bu soruda BİRDEN FAZLA seçenek seçin</div>' : ''}
+      <div class="question-text">${escapeHtml(q.q)}</div>
+      <div class="options">${optsHtml}</div>
+      ${feedback}
+
+      <div class="nav-buttons">
+        <button class="secondary" onclick="prevQ()" ${state.currentQ === 0 ? 'disabled' : ''}>← Önceki</button>
+        ${!isSubmitted ? `<button onclick="submitAnswer()" ${userAns.length === 0 ? 'disabled' : ''}>Cevabı Göster</button>` : ''}
+        <button class="secondary" onclick="nextQ()" ${state.currentQ === exam.questions.length - 1 ? 'disabled' : ''}>Sonraki →</button>
+        <button onclick="finishExam()" style="margin-left:auto;">Sınavı Bitir & Sonuç Gör</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <div style="display:flex; justify-content:space-between; align-items:center;">
+        <h3 style="color:#1a4d7a;">Soru Listesi</h3>
+        <button class="secondary" onclick="goHome()">← Ana Sayfa</button>
+      </div>
+      <div class="question-list-grid">${gridHtml}</div>
+      <div class="info-note">
+        <span style="display:inline-block; width:12px; height:12px; background:#c8e6c9; border:1px solid #2e8b2e; margin-right:4px;"></span> Doğru
+        <span style="display:inline-block; width:12px; height:12px; background:#ffcdd2; border:1px solid #c0392b; margin:0 4px 0 12px;"></span> Yanlış
+        <span style="display:inline-block; width:12px; height:12px; background:#d4e6f5; border:1px solid #1a4d7a; margin:0 4px 0 12px;"></span> Cevaplanmış (onaylanmamış)
+      </div>
+    </div>
+  `;
+}
+
+function selectOption(i) {
+  const q = examData[state.currentExam].questions[state.currentQ];
+  let arr = state.answers[state.currentQ] || [];
+  if (q.multi) {
+    if (arr.includes(i)) arr = arr.filter(x => x !== i);
+    else arr = [...arr, i];
+  } else {
+    arr = [i];
+  }
+  state.answers[state.currentQ] = arr;
+  render();
+}
+
+function submitAnswer() {
+  state.submitted[state.currentQ] = true;
+  render();
+}
+
+function prevQ() {
+  if (state.currentQ > 0) { state.currentQ--; render(); }
+}
+
+function nextQ() {
+  const exam = examData[state.currentExam];
+  if (state.currentQ < exam.questions.length - 1) { state.currentQ++; render(); }
+}
+
+function goToQ(i) {
+  state.currentQ = i;
+  render();
+}
+
+function goHome() {
+  if (confirm('Ana sayfaya dönmek istediğinize emin misiniz? İlerlemeniz kaybolacak.')) {
+    state.view = 'home';
+    render();
+  }
+}
+
+function finishExam() {
+  state.view = 'result';
+  render();
+}
+
+function renderResult() {
+  const exam = examData[state.currentExam];
+  let correct = 0;
+  let answered = 0;
+  let incorrectList = [];
+
+  for (let i = 0; i < exam.questions.length; i++) {
+    const q = exam.questions[i];
+    const ans = state.answers[i];
+    if (ans && ans.length > 0) {
+      answered++;
+      if (arraysEqual(ans.slice().sort(), q.correct.slice().sort())) {
+        correct++;
+      } else {
+        incorrectList.push(i);
+      }
+    }
+  }
+
+  const total = exam.questions.length;
+  const percent = Math.round((correct / total) * 100);
+  const passed = correct >= 26;  // ISTQB geçme notu 26/40
+
+  let incorrectHtml = '';
+  if (incorrectList.length > 0) {
+    incorrectHtml = incorrectList.map(i => {
+      const q = exam.questions[i];
+      const userAns = state.answers[i] || [];
+      const userLetters = userAns.length > 0 ? userAns.map(x => String.fromCharCode(97+x)).join(', ') : 'boş';
+      const correctLetters = q.correct.map(x => String.fromCharCode(97+x)).join(', ');
+      return `
+        <div style="padding:12px; border:1px solid #eee; border-radius:6px; margin-bottom:10px;">
+          <div style="color:#1a4d7a; font-weight:600; margin-bottom:6px;">Soru ${i+1} · ${q.lo}</div>
+          <div style="font-size:14px; color:#555; white-space:pre-wrap; margin-bottom:8px;">${escapeHtml(q.q.substring(0, 200))}${q.q.length > 200 ? '...' : ''}</div>
+          <div style="font-size:14px;"><span style="color:#c0392b;">Cevabınız: ${userLetters}</span> · <span style="color:#2e8b2e;">Doğru: ${correctLetters}</span></div>
+          <button class="secondary" style="margin-top:8px; font-size:13px; padding:6px 12px;" onclick="reviewQ(${i})">Soruya Git</button>
+        </div>
+      `;
+    }).join('');
+  }
+
+  app.innerHTML = `
+    <h1>${exam.title} - Sonuç</h1>
+
+    <div class="result-box">
+      <div style="font-size:18px;">Puanınız</div>
+      <div class="score ${passed ? 'pass' : 'fail'}">${correct} / ${total}</div>
+      <div style="font-size:22px;">%${percent}</div>
+      <div style="margin-top:12px; font-size:16px;">
+        ${passed ? '🎉 GEÇTİ (Geçme notu: 26/40)' : '❌ KALDI (Geçme notu: 26/40)'}
+      </div>
+      <div style="margin-top:8px; font-size:14px; opacity:0.85;">
+        Cevaplanmayan: ${total - answered} soru
+      </div>
+    </div>
+
+    <div class="card">
+      <h3 style="color:#1a4d7a; margin-bottom:12px;">Yanlış Cevaplar (${incorrectList.length})</h3>
+      ${incorrectList.length > 0 ? incorrectHtml : '<p style="color:#2e8b2e;">Hiç yanlış yok! 🎉</p>'}
+    </div>
+
+    <div class="card">
+      <div class="nav-buttons">
+        <button onclick="restartExam()">Bu Sınavı Tekrar Çöz</button>
+        <button class="secondary" onclick="goHomeForce()">Ana Sayfa</button>
+      </div>
+    </div>
+  `;
+}
+
+function reviewQ(i) {
+  state.currentQ = i;
+  state.view = 'exam';
+  render();
+}
+
+function restartExam() {
+  startExam(state.currentExam);
+}
+
+function goHomeForce() {
+  state.view = 'home';
+  render();
+}
+
+// ============= YARDIMCILAR =============
+function arraysEqual(a, b) {
+  if (a.length !== b.length) return false;
+  for (let i = 0; i < a.length; i++) if (a[i] !== b[i]) return false;
+  return true;
+}
+
+function escapeHtml(str) {
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
+}
+
+// başlangıç
+render();
+</script>
+</body>
+</html>
